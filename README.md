@@ -265,7 +265,7 @@ queryConfig.values;
 The `Where` function supports the following operators:
 
 - `$eq` - Equal
-- `$neq` - Not equal
+- `$neq` - Not Equal
 - `$gt` - Greater than
 - `$gte` - Greater than or equal
 - `$lt` - Less than
@@ -282,13 +282,13 @@ Example of writing a where clause:
 ```json
 {
   "id": { "$eq": 1 },
-  "name": { "$like": "John%" }
+  "name": { "$like": "John%" },
   "$or": {
     "created_at": { 
-      "$gt": new Date('2020-01-01'), 
-      "$lt": new Date('2020-01-31') 
+      "$gt": "2020-01-01", 
+      "$lt": "2020-12-31" 
     },
-    "updated_at": { "$gt": new Date('2020-01-01') }
+    "updated_at": { "$gt": "2020-01-01" }
   }
 }
 ```
@@ -312,5 +312,21 @@ queryConfig.values; // [1, 2, 3]
 
 ## Custom SQL functions
 
+A templating function for `sql` template tag is a factory that has to return
+an anonymous function that accepts a `SqlTagParserContext` object. Then it can do whatever it wants with the context and return a `void`. The `SqlTagParserContext` object is a builder that allows to addition of new SQL fragments to the query or bind
+values.
 
+See an example of how a `Between`` function can be implemented:
+
+```typescript
+export function Between(from: NumericType, to: NumericType) {
+  return (context: SqlTagParserContext): void => {
+    context
+      .addKeyword('BETWEEN')
+      .bindValue(from)
+      .addKeyword('AND')
+      .bindValue(to);
+  };
+}
+```
 
