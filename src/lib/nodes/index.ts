@@ -6,3 +6,4 @@ export * from './identifier/identifier';
 export * from './text/text';
 export * from './keyword/keyword';
 export * from './compare/compare';
+export * from './where/where.types';

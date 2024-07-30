@@ -4,6 +4,7 @@ import { escapeLiteral } from 'pg';
 // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
 const { prepareValue } = require('pg/lib/utils');
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export declare namespace Literal {
   export interface Options {
     /**
@@ -19,7 +20,7 @@ export function Literal(
   options: Literal.Options = Literal.DEFAULT_OPTIONS,
 ) {
   return (context: SqlTagParserContext): void => {
-    if (options.spreadValues) {
+    if (options.spreadValues === true) {
       const nodeArr = Array.isArray(value) ? value : [value];
 
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return

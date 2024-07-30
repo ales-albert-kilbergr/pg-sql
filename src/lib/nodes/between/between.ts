@@ -1,4 +1,4 @@
-import type { NumericType } from '@kilbergr/where';
+import type { NumericType } from '../where/where.types';
 import type { SqlTagParserContext } from '../../parser-context';
 
 export function Between(from: NumericType, to: NumericType) {

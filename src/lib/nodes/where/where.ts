@@ -4,7 +4,7 @@ import type {
   Condition,
   NotBetweenOptions,
   PropertyCondition,
-} from '@kilbergr/where';
+} from './where.types';
 import type { SqlTagParserContext } from '../../parser-context';
 import { Between } from '../between/between';
 import { Identifier } from '../identifier/identifier';
