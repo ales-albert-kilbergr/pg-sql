@@ -3,7 +3,6 @@
   "compilerOptions": {
     "lib": ["ES2022"],
     "declaration": true,
-    "declarationDir": "./dist/tmp/types",
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "removeComments": false
