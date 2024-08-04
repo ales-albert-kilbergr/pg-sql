@@ -9,13 +9,13 @@ try {
   await $`rm -rf dist`;
   // Compile the esm build into its tmp directory
   console.log(chalk.yellow('Compiling ESM build'));
-  await $`npx tsc -p tsconfig.esm.json --outDir dist/esm`;
+  await $`npx tsc -p tsconfig.esm.json --outDir dist/lib/esm`;
   // Compile the cjs build into its tmp directory
   console.log(chalk.yellow('Compiling CJS build'));
-  await $`npx tsc -p tsconfig.cjs.json --outDir dist/cjs`;
+  await $`npx tsc -p tsconfig.cjs.json --outDir dist/lib/cjs`;
   // Compile the types build into its tmp directory
   console.log(chalk.yellow('Compiling Types build'));
-  await $`npx tsc -p tsconfig.types.json --outDir dist/types`;
+  await $`npx tsc -p tsconfig.types.json --outDir dist/lib/types`;
   // Build the main package.json
   console.log(chalk.cyan('Rebuilding main package.json'));
 
@@ -35,9 +35,9 @@ try {
     url: workspacePackageJson.url,
     repository: workspacePackageJson.repository,
     peerDependencies: workspacePackageJson.dependencies,
-    main: 'cjs/index.js',
-    module: 'esm/index.js',
-    types: 'types/index.d.ts',
+    main: 'lib/cjs/index.js',
+    module: 'lib/esm/index.js',
+    types: 'lib/types/index.d.ts',
   };
 
   await fs.promises.writeFile(
@@ -48,7 +48,30 @@ try {
   console.log(chalk.cyan('Copy README.md'));
   await $`cp README.md dist/README.md`;
 
+  // Compile sub package "testing"
+  console.log(chalk.yellow('Compiling testing utilities'))
+  await $`npx tsc -p tsconfig.testing.json --outDir dist/testing`;
+
+  const npmTestingPackageJson = {
+    name: workspacePackageJson.name,
+    description: 'Testing utilities',
+    version: workspacePackageJson.version,
+    author: workspacePackageJson.author,
+    keywords: workspacePackageJson.keywords,
+    license: workspacePackageJson.license,
+    url: workspacePackageJson.url,
+    repository: workspacePackageJson.repository,
+    main: 'testing/index.js',
+  };
+
+  await fs.promises.writeFile(
+    'dist/testing/package.json',
+    JSON.stringify(npmTestingPackageJson, null, 2),
+  );
+
+
   console.log(chalk.green('Compilation successful'));
 } catch (error) {
+  console.log(error);
   console.error(chalk.red('Compilation failed:'), chalk.red(error.message));
 }
