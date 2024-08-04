@@ -23,7 +23,7 @@ export function InsertValues(
       if (i > 0) {
         context.addFragment(', ');
       }
-      context.addFragment(' (');
+      context.openBracket();
       for (let c = 0; c < columns.length; c++) {
         const column = columns[c];
         if (c > 0) {
@@ -33,7 +33,7 @@ export function InsertValues(
         context.addFragment(' = ');
         context.bindValue(row[column]);
       }
-      context.addFragment(')');
+      context.closeBracket();
     }
   };
 }
