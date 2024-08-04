@@ -8,8 +8,8 @@ export declare namespace InsertValues {
 
 const DEFAULT_OPTIONS: InsertValues.Options = {};
 
-export function InsertValues(
-  values: Record<string, unknown> | Record<string, unknown>[],
+export function InsertValues<O extends object>(
+  values: O | O[],
   options: InsertValues.Options = DEFAULT_OPTIONS,
 ) {
   const valueArr = Array.isArray(values) ? values : [values];
@@ -31,7 +31,7 @@ export function InsertValues(
         }
         context.addIdentifier(column);
         context.addFragment(' = ');
-        context.bindValue(row[column]);
+        context.bindValue((row as Record<string, unknown>)[column]);
       }
       context.closeBracket();
     }
