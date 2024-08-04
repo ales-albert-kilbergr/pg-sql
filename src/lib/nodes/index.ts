@@ -9,3 +9,4 @@ export * from './compare/compare';
 export * from './where/where.types';
 export * from './insert-values/insert-values';
 export * from './insert-columns/insert-columns';
+export * from './in/in';
