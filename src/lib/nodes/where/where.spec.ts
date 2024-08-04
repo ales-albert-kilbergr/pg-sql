@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import type { Condition } from '@kilbergr/where';
 import { SqlTagParserContext } from '../../parser-context';
 import { Where } from './where';
+import type { Condition } from './where.types';
 
 describe('(Unit) where', () => {
   it('should add nothing to the context if the condition is undefined', () => {
