@@ -795,11 +795,11 @@ __metadata:
   linkType: soft
 
 "@kilbergr/tagged-types@npm:^0.1.0-Alpha.3":
-  version: 0.1.0-Alpha.3
-  resolution: "@kilbergr/tagged-types@npm:0.1.0-Alpha.3"
+  version: 0.1.0-Alpha.4
+  resolution: "@kilbergr/tagged-types@npm:0.1.0-Alpha.4"
   dependencies:
     validator: "npm:^13.12.0"
-  checksum: 10/6acc16407245b623101c5234dfd5b2c5e551d97dd1a1375d2dbfec911f9615b1ab2a407281beaaf09a8231731a00bd240f0245cfe6d055765821bf472f97fe51
+  checksum: 10/11d2e101fa0c824b3cfeb6f7baf13774106c1ba0ebf601a18b082a5d93235bb7b06785f57f793e2c3e29c23a1abfeaba9f0bcda8844a3e59279ef843f2098747
   languageName: node
   linkType: hard
 
@@ -1033,20 +1033,20 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*, @types/node@npm:>=20":
-  version: 22.0.2
-  resolution: "@types/node@npm:22.0.2"
+  version: 22.1.0
+  resolution: "@types/node@npm:22.1.0"
   dependencies:
-    undici-types: "npm:~6.11.1"
-  checksum: 10/7f5937f22d5171df6d1764b838b64f03fd2686e0ebee15bb64eb609ee5280cfd8cbbb78efdf163bb49eee11c77de461ef8b85e2781e508d231777390ddf0e8ec
+    undici-types: "npm:~6.13.0"
+  checksum: 10/c2ac1340509646b6c673b27fae2a46e501a97e540e7221be4dd2e0be7a0f61efefb5bf3be8bedf2dbce245fa49cfc49bba77bce73fa3c4296d0d19521ced3222
   languageName: node
   linkType: hard
 
 "@types/node@npm:^20.14.12":
-  version: 20.14.13
-  resolution: "@types/node@npm:20.14.13"
+  version: 20.14.14
+  resolution: "@types/node@npm:20.14.14"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10/749160b6bd9866e6169cb1a222e75aaf81da3868af1fda1e1e66d33c7e182be381f98a42b7d231fddf470f6389f2052ee842e776b3fdc677df798b933617866d
+  checksum: 10/035bc347e3de04888d537801e23eb4b4f99522975ca002dbfef978edd853710031b7cd43bf022670d6aba4ed5d4ac75ea1b5ff77ff8f80998bffd943b7bcef48
   languageName: node
   linkType: hard
 
@@ -1582,16 +1582,16 @@ __metadata:
   linkType: hard
 
 "browserslist@npm:^4.23.1":
-  version: 4.23.2
-  resolution: "browserslist@npm:4.23.2"
+  version: 4.23.3
+  resolution: "browserslist@npm:4.23.3"
   dependencies:
-    caniuse-lite: "npm:^1.0.30001640"
-    electron-to-chromium: "npm:^1.4.820"
-    node-releases: "npm:^2.0.14"
+    caniuse-lite: "npm:^1.0.30001646"
+    electron-to-chromium: "npm:^1.5.4"
+    node-releases: "npm:^2.0.18"
     update-browserslist-db: "npm:^1.1.0"
   bin:
     browserslist: cli.js
-  checksum: 10/326a98b1c39bcc9a99b197f15790dc28e122b1aead3257c837421899377ac96239123f26868698085b3d9be916d72540602738e1f857e86a387e810af3fda6e5
+  checksum: 10/e266d18c6c6c5becf9a1a7aa264477677b9796387972e8fce34854bb33dc1666194dc28389780e5dc6566e68a95e87ece2ce222e1c4ca93c2b75b61dfebd5f1c
   languageName: node
   linkType: hard
 
@@ -1681,10 +1681,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001640":
-  version: 1.0.30001646
-  resolution: "caniuse-lite@npm:1.0.30001646"
-  checksum: 10/6c66a5677b58988c2ee86905b05705b00be552a3e4f768bd0d9a10098cc4ec471de5b204e2c2ab534f34b5f216c059321a9e5cb1395928cf29ded0a4aae4535f
+"caniuse-lite@npm:^1.0.30001646":
+  version: 1.0.30001649
+  resolution: "caniuse-lite@npm:1.0.30001649"
+  checksum: 10/a528438a40124d9eb70b0ebacd14e331f925a73e26bf68ac15658c031e6b750b8c1f9c86047b7b9936406e419c87cbe61c9d7e5632db3aa4ca754b1496d21324
   languageName: node
   linkType: hard
 
@@ -2027,7 +2027,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:^1.4.820":
+"electron-to-chromium@npm:^1.5.4":
   version: 1.5.4
   resolution: "electron-to-chromium@npm:1.5.4"
   checksum: 10/ce64db25c399d33830e74e58bbc5ab7c06948669e204b6508e98c278ddaead1da1cbb356d15b55eb659f89d4d7bcf00944f08f96e886f1d3d065ba11744c5633
@@ -4301,7 +4301,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-releases@npm:^2.0.14":
+"node-releases@npm:^2.0.18":
   version: 2.0.18
   resolution: "node-releases@npm:2.0.18"
   checksum: 10/241e5fa9556f1c12bafb83c6c3e94f8cf3d8f2f8f904906ecef6e10bcaa1d59aa61212d4651bec70052015fc54bd3fdcdbe7fc0f638a17e6685aa586c076ec4e
@@ -5401,8 +5401,8 @@ __metadata:
   linkType: hard
 
 "ts-jest@npm:^29.1.5":
-  version: 29.2.3
-  resolution: "ts-jest@npm:29.2.3"
+  version: 29.2.4
+  resolution: "ts-jest@npm:29.2.4"
   dependencies:
     bs-logger: "npm:0.x"
     ejs: "npm:^3.1.10"
@@ -5433,7 +5433,7 @@ __metadata:
       optional: true
   bin:
     ts-jest: cli.js
-  checksum: 10/d3c3388cea8ea4a7f52c7c97e34a1abf1d83152fa0625ddea7b82c0e3599a786185b95d3e12a09eb27521adedc90780a3dc9df29156ca83f1094e163113ede62
+  checksum: 10/69db25e06b93f4ea4e454a54afc4e49c59b71f7efdef94fe728f4d62b8c475364d0fed7253212c5394669dcd143516ab6f630f4b139b2f9c37119245cf5a963c
   languageName: node
   linkType: hard
 
@@ -5622,10 +5622,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~6.11.1":
-  version: 6.11.1
-  resolution: "undici-types@npm:6.11.1"
-  checksum: 10/bdee4c3d67626bf45f1502b817b96e328ff9c3c006ecafa3708bc39ba66d6cecc2d5d69d3148667bb833d3fb457c0e715bfeed0b7b6767fa4d3044f5c1036ba9
+"undici-types@npm:~6.13.0":
+  version: 6.13.0
+  resolution: "undici-types@npm:6.13.0"
+  checksum: 10/da52e37cbc6da3a75da86fa08dd795ca8924430deb91005eb884b840e46e19013ccd4c1c289f70018e8cf0c338add24a500e7c3acfcd49b1ffb27ff9f91e38b9
   languageName: node
   linkType: hard
 
