@@ -29,8 +29,6 @@ export function InsertValues<O extends object>(
         if (c > 0) {
           context.addFragment(', ');
         }
-        context.addIdentifier(column);
-        context.addFragment(' = ');
         context.bindValue((row as Record<string, unknown>)[column]);
       }
       context.closeBracket();

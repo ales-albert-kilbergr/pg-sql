@@ -9,9 +9,7 @@ describe('(Unit) Insert Values', () => {
     // Act
     const queryConfig = sql`INSERT INTO users ${InsertValues(data)}`;
     // Assert
-    expect(queryConfig.text).toBe(
-      'INSERT INTO users VALUES ("id" = $1, "name" = $2)',
-    );
+    expect(queryConfig.text).toBe('INSERT INTO users VALUES ($1, $2)');
     expect(queryConfig.values).toEqual([1, 'test']);
   });
 
@@ -25,7 +23,7 @@ describe('(Unit) Insert Values', () => {
     const queryConfig = sql`INSERT INTO users ${InsertValues(data)}`;
     // Assert
     expect(queryConfig.text).toBe(
-      'INSERT INTO users VALUES ("id" = $1, "name" = $2), ("id" = $3, "name" = $4)',
+      'INSERT INTO users VALUES ($1, $2), ($3, $4)',
     );
     expect(queryConfig.values).toEqual([1, 'test', 2, 'test2']);
   });
@@ -41,9 +39,7 @@ describe('(Unit) Insert Values', () => {
       columns: ['name'],
     })}`;
     // Assert
-    expect(queryConfig.text).toBe(
-      'INSERT INTO users VALUES ("name" = $1), ("name" = $2)',
-    );
+    expect(queryConfig.text).toBe('INSERT INTO users VALUES ($1), ($2)');
     expect(queryConfig.values).toEqual(['test', 'test2']);
   });
 
@@ -53,9 +49,7 @@ describe('(Unit) Insert Values', () => {
     // Act
     const queryConfig = sql`INSERT INTO users ${InsertValues(data)}`;
     // Assert
-    expect(queryConfig.text).toBe(
-      'INSERT INTO users VALUES ("id" = $1, "name" = DEFAULT)',
-    );
+    expect(queryConfig.text).toBe('INSERT INTO users VALUES ($1, DEFAULT)');
     expect(queryConfig.values).toEqual([1]);
   });
 
@@ -65,9 +59,7 @@ describe('(Unit) Insert Values', () => {
     // Act
     const queryConfig = sql`INSERT INTO users ${InsertValues(data, { columns: ['id', 'name'] })}`;
     // Assert
-    expect(queryConfig.text).toBe(
-      'INSERT INTO users VALUES ("id" = $1, "name" = DEFAULT)',
-    );
+    expect(queryConfig.text).toBe('INSERT INTO users VALUES ($1, DEFAULT)');
     expect(queryConfig.values).toEqual([1]);
   });
 });
