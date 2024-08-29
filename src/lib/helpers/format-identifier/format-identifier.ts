@@ -50,7 +50,9 @@ function formatIdentifierTemplate(
   for (const [key, value] of Object.entries(tplVars)) {
     identifier = identifier.replace(
       `{${key}}`,
-      options.useQuotes ? escapeIdentifier(value) : value,
+      options.useQuotes === true
+        ? escapeIdentifier(value as string)
+        : (value as string),
     );
   }
   // Remove any remaining template values
