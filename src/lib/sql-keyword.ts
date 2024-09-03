@@ -1,4 +1,5 @@
 export type SqlKeyword =
+  | 'AS'
   | 'SELECT'
   | 'FROM'
   | 'WHERE'
@@ -25,6 +26,7 @@ export type SqlKeyword =
   | 'CASCADE'
   | 'IF EXISTS'
   | 'IF NOT EXISTS'
+  | 'INSERT INTO'
   | 'NULL'
   | '>'
   | '<'
