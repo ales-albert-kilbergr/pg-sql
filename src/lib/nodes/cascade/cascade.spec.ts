@@ -30,4 +30,15 @@ describe('(Unit) Cascade', () => {
     // Assert
     expect(context.toSqlText()).toBe('');
   });
+
+  it('should not add CASCADE to the context if useFlag is undefined', () => {
+    // Arrange
+    const useFlag = undefined;
+
+    // Act
+    Cascade(useFlag)(context);
+
+    // Assert
+    expect(context.toSqlText()).toBe('');
+  });
 });

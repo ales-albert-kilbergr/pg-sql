@@ -30,4 +30,15 @@ describe('(Unit) IfExists', () => {
     // Assert
     expect(context.toSqlText()).toBe('');
   });
+
+  it('should not add IF EXISTS to the context if useFlag is undefined', () => {
+    // Arrange
+    const useFlag = undefined;
+
+    // Act
+    IfExists(useFlag)(context);
+
+    // Assert
+    expect(context.toSqlText()).toBe('');
+  });
 });
