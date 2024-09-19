@@ -34,4 +34,5 @@ export type SqlKeyword =
   | '<='
   | '='
   | '<>'
-  | 'AUTHORIZATION';
+  | 'AUTHORIZATION'
+  | 'UNIQUE';

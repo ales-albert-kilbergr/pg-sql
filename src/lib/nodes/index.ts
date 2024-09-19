@@ -20,3 +20,4 @@ export * from './cascade/cascade';
 export * from './if-not-exists/if-not-exists';
 export * from './insert-into/insert-into';
 export * from './schema-authorization/schema-authorization';
+export * from './unique/unique';
