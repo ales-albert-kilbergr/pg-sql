@@ -1,3 +1,6 @@
+/**
+ * Exposes various nodes that can be used to build SQL queries.
+ */
 export * from './value/value.node';
 export * from './literal/literal.node';
 export * from './exists/exists';
@@ -22,3 +25,4 @@ export * from './insert-into/insert-into';
 export * from './schema-authorization/schema-authorization';
 export * from './unique/unique';
 export * from './concurrently/concurrently';
+export * from './only/only';
