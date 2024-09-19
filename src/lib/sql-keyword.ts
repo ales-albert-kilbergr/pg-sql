@@ -35,4 +35,5 @@ export type SqlKeyword =
   | '='
   | '<>'
   | 'AUTHORIZATION'
-  | 'UNIQUE';
+  | 'UNIQUE'
+  | 'CONCURRENTLY';
