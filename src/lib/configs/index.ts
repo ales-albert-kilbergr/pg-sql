@@ -7,3 +7,4 @@ export * from './drop-schema/drop-schema';
 export * from './schema-exists/schema-exists';
 // Table
 export * from './drop-table/drop-table';
+export * from './table-exists/table-exists';

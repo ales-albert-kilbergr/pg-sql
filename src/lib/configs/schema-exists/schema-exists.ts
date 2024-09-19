@@ -12,7 +12,7 @@ export function SchemaExists(args: SchemaExists.Args): QueryConfig {
     SELECT EXISTS (
       SELECT 1
       FROM information_schema.schemata
-      WHERE schema_name = ${args.schema}
+      WHERE schema_name = :${args.schema}
     ) as "exists";
   `;
 }
