@@ -1,6 +1,6 @@
-import { Cascade, Identifier, IfExists } from '../../nodes';
-import type { QueryConfig } from '../../query-config';
-import { sql } from '../../sql';
+import { Cascade, Identifier, IfExists } from '../nodes';
+import type { QueryConfig } from '../query-config';
+import { sql } from '../sql';
 
 export declare namespace DropSchema {
   interface Args {

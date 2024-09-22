@@ -1,4 +1,4 @@
-import { DropSchema } from './drop-schema';
+import { DropSchema } from './drop-schema.sql';
 
 describe('(Unit) DropSchema', () => {
   it('should DropSchema a correct sql query text with just a schema', () => {

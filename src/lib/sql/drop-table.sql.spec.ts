@@ -1,4 +1,4 @@
-import { DropTable } from './drop-table';
+import { DropTable } from './drop-table.sql';
 
 describe('(Unit) DropTable', () => {
   it('should build a correct sql query text with just a table and schema', () => {

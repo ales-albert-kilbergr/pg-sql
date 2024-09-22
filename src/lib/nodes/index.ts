@@ -26,3 +26,4 @@ export * from './schema-authorization/schema-authorization';
 export * from './unique/unique';
 export * from './concurrently/concurrently';
 export * from './only/only';
+export * from './returning/returning';

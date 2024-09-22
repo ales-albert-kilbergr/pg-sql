@@ -1,4 +1,4 @@
-import { SchemaExists } from './schema-exists';
+import { SchemaExists } from './schema-exists.sql';
 
 describe('(Unit) SchemaExists', () => {
   it('should build a correct sql query text with just a schema', () => {

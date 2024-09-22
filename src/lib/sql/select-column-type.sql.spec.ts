@@ -1,4 +1,4 @@
-import { SelectColumnType } from './select-column-type';
+import { SelectColumnType } from './select-column-type.sql';
 
 describe('(Unit) SelectColumnType', () => {
   it('should build a correct sql query text', () => {

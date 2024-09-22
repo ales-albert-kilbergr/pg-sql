@@ -1,4 +1,4 @@
-import { CreateSchema } from './create-schema';
+import { CreateSchema } from './create-schema.sql';
 
 describe('(Unit) CreateSchema', () => {
   it('should build a correct sql query text with just a schema', () => {

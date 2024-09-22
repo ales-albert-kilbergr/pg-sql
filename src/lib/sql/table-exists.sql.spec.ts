@@ -1,4 +1,4 @@
-import { TableExists } from './table-exists';
+import { TableExists } from './table-exists.sql';
 
 describe('(Unit) TableExists', () => {
   it('should build a correct sql query text with just a schema and table', () => {

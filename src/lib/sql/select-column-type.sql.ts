@@ -1,5 +1,5 @@
-import type { QueryConfig } from '../../query-config';
-import { sql } from '../../sql';
+import type { QueryConfig } from '../query-config';
+import { sql } from '../sql';
 
 export declare namespace SelectColumnType {
   interface Args {
