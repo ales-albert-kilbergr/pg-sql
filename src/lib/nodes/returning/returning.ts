@@ -1,6 +1,6 @@
 import type { SqlTagParserContext } from '../../parser-context';
 
-export function Returning(columns: string[]) {
+export function Returning(columns: string[] = []) {
   return (context: SqlTagParserContext): void => {
     if (columns.length > 0) {
       context.addKeyword('RETURNING');

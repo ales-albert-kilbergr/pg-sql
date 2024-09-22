@@ -30,4 +30,15 @@ describe('(Unit) Returning', () => {
     // Assert
     expect(context.toSqlText()).toBe('');
   });
+
+  it('should not add RETURNING to the context if columns is undefined', () => {
+    // Arrange
+    const columns = undefined;
+
+    // Act
+    Returning(columns)(context);
+
+    // Assert
+    expect(context.toSqlText()).toBe('');
+  });
 });
