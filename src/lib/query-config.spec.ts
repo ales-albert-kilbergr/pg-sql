@@ -116,7 +116,7 @@ describe('(Unit) mergeQueryConfigBuilders', () => {
         schema: 'test_schema',
         table: 'users',
         name: 'idx_users_name',
-        indexedNames: ['name'],
+        columns: ['name'],
       },
     ]);
 

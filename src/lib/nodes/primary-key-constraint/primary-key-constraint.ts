@@ -1,19 +1,27 @@
-import type { PrimaryKey } from '../../model';
 import type { SqlTagParserContext } from '../../parser-context';
 
-export function PrimaryKeyConstraint(args?: PrimaryKey) {
+export interface PrimaryKeyArgs {
+  columns?: string[];
+  table: string;
+  constraintName?: string;
+}
+
+export function PrimaryKey(args?: PrimaryKeyArgs) {
   return (ctx: SqlTagParserContext): void => {
-    if (!args) {
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
+    if (!args || !args.columns || args.columns.length === 0) {
       return;
     }
+
     const primaryKeyName = args.constraintName ?? `pk_${args.table}`;
     ctx.addKeyword('CONSTRAINT');
     ctx.addIdentifier(primaryKeyName);
     ctx.addKeyword('PRIMARY KEY');
     ctx.openBracket();
+    const columnsCount = args.columns.length;
     args.columns.forEach((column, index) => {
       ctx.addIdentifier(column);
-      if (index < args.columns.length - 1) {
+      if (index < columnsCount - 1) {
         ctx.addComma();
       }
     });

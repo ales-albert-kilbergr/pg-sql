@@ -7,7 +7,7 @@ describe('(Unit) CreateIndexSql', () => {
       schema: 'my_schema',
       table: 'users',
       name: 'idx_users_name',
-      indexedNames: ['name'],
+      columns: ['name'],
     };
 
     // Act
@@ -25,7 +25,7 @@ describe('(Unit) CreateIndexSql', () => {
       schema: 'my_schema',
       table: 'users',
       name: 'idx_users_name',
-      indexedNames: ['name'],
+      columns: ['name'],
       unique: true,
     };
 
@@ -44,7 +44,7 @@ describe('(Unit) CreateIndexSql', () => {
       schema: 'my_schema',
       table: 'users',
       name: 'idx_users_name',
-      indexedNames: ['name'],
+      columns: ['name'],
       concurrently: true,
     };
 
@@ -63,7 +63,7 @@ describe('(Unit) CreateIndexSql', () => {
       schema: 'my_schema',
       table: 'users',
       name: 'idx_users_name',
-      indexedNames: ['name'],
+      columns: ['name'],
       ifNotExists: true,
     };
 
@@ -82,7 +82,7 @@ describe('(Unit) CreateIndexSql', () => {
       schema: 'my_schema',
       table: 'users',
       name: 'idx_users_name',
-      indexedNames: ['name'],
+      columns: ['name'],
       only: true,
     };
 
@@ -101,7 +101,7 @@ describe('(Unit) CreateIndexSql', () => {
       schema: 'my_schema',
       table: 'users',
       name: 'idx_users_name',
-      indexedNames: ['name'],
+      columns: ['name'],
       using: 'gin',
     };
 

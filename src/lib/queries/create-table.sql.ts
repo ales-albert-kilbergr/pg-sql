@@ -1,9 +1,10 @@
-import type { IUniqueConstraint, PrimaryKey } from '../model';
+import type { IUniqueConstraint } from '../model';
 import type { ColumnList } from '../model/column';
 import {
   Identifier,
   IfNotExists,
-  PrimaryKeyConstraint,
+  PrimaryKey,
+  type PrimaryKeyArgs,
   TableColumnDefinition,
 } from '../nodes';
 import { TableUniqueConstraintList } from '../nodes/table-unique-constraint-list/table-unique-constraint-list';
@@ -15,7 +16,7 @@ export interface CreateTableArgs {
   schema?: string;
   ifNotExists?: boolean;
   columns: ColumnList;
-  primaryKey?: PrimaryKey;
+  primaryKey?: Omit<PrimaryKeyArgs, 'table'>;
   uniqueConstraints?: IUniqueConstraint[];
 }
 
@@ -29,7 +30,7 @@ export function CreateTableSql(args: CreateTableArgs): QueryConfig {
       (
         ${TableColumnDefinition(args.columns)}
         ${args.primaryKey ? ', ' : ''}
-        ${PrimaryKeyConstraint(args.primaryKey)}
+        ${PrimaryKey({ ...args.primaryKey, table: args.table })}
         ${args.uniqueConstraints && args.uniqueConstraints.length > 0 ? ', ' : ''}
         ${TableUniqueConstraintList(args.uniqueConstraints)}
       );

@@ -7,7 +7,7 @@ export interface CreateIndexSqlArgs {
   table: string;
   ifNotExists?: boolean;
   name: string;
-  indexedNames: string[];
+  columns: string[];
   unique?: boolean;
   concurrently?: boolean;
   only?: boolean;
@@ -23,6 +23,6 @@ export function CreateIndexSql(args: CreateIndexSqlArgs): QueryConfig {
       ${IfNotExists(args.ifNotExists)} ${Identifier(args.name)}
       ON ${Only(args.only)} ${Identifier(args.schema)}.${Identifier(args.table)}
       USING ${args.using ?? DEFAULT_USING}
-      (${Identifier(args.indexedNames)});
+      (${Identifier(args.columns)});
   `;
 }
