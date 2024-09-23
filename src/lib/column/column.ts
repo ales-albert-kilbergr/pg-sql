@@ -11,7 +11,7 @@ export interface NumericColumnProps {
   scale: number;
 }
 
-export interface Column<
+export interface IColumn<
   TYPE extends ColumnType,
   DATA_TYPE,
   O extends object = object,
@@ -41,8 +41,8 @@ export interface WithPrecisionColumnProps {
 
 export function defineSmallintColumn(
   name: string,
-  props: ColumnProps,
-): Column<'smallint', number> {
+  props: ColumnProps = {},
+): IColumn<'smallint', number> {
   return {
     type: 'smallint',
     name,
@@ -53,8 +53,8 @@ export function defineSmallintColumn(
 
 export function defineIntegerColumn(
   name: string,
-  props: ColumnProps,
-): Column<'integer', number> {
+  props: ColumnProps = {},
+): IColumn<'integer', number> {
   return {
     type: 'integer',
     name,
@@ -65,8 +65,8 @@ export function defineIntegerColumn(
 
 export function defineBigintColumn(
   name: string,
-  props: ColumnProps,
-): Column<'bigint', bigint> {
+  props: ColumnProps = {},
+): IColumn<'bigint', bigint> {
   return {
     type: 'bigint',
     name,
@@ -81,7 +81,7 @@ export function defineBigintColumn(
 export function defineNumericColumn(
   name: string,
   props: ColumnProps & WithPrecisionColumnProps,
-): Column<'numeric', number> {
+): IColumn<'numeric', number> {
   return {
     type: 'numeric',
     name,
@@ -92,8 +92,8 @@ export function defineNumericColumn(
 
 export function defineTextColumn(
   name: string,
-  { nullable, propertyKey }: ColumnProps,
-): Column<'text', string> {
+  { nullable, propertyKey }: ColumnProps = {},
+): IColumn<'text', string> {
   return {
     type: 'text',
     name,
@@ -105,7 +105,7 @@ export function defineTextColumn(
 export function defineVarcharColumn(
   name: string,
   { nullable, propertyKey, ...otherProps }: ColumnProps & WithLengthColumnProps,
-): Column<'varchar', string, WithLengthColumnProps> {
+): IColumn<'varchar', string, WithLengthColumnProps> {
   return {
     type: 'varchar',
     name,
@@ -119,8 +119,8 @@ export function defineVarcharColumn(
 
 export function defineTimestampWithTimeZoneColumn(
   name: string,
-  { nullable, propertyKey }: ColumnProps,
-): Column<'timestampz', Date> {
+  { nullable, propertyKey }: ColumnProps = {},
+): IColumn<'timestampz', Date> {
   return {
     type: 'timestampz',
     name,
