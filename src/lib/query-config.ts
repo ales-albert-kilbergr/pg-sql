@@ -35,7 +35,7 @@ export function mergeQueryConfigBuilders<
 >(
   a: QueryConfigBuilder<ARGS_1>,
   b: QueryConfigBuilder<ARGS_2>,
-): QueryConfigBuilder<ARGS_1 & ARGS_2>;
+): QueryConfigBuilder<[ARGS_1, ARGS_2]>;
 export function mergeQueryConfigBuilders<
   ARGS_1 extends object | never,
   ARGS_2 extends object | never,
@@ -44,7 +44,7 @@ export function mergeQueryConfigBuilders<
   a: QueryConfigBuilder<ARGS_1>,
   b: QueryConfigBuilder<ARGS_2>,
   c: QueryConfigBuilder<ARGS_3>,
-): QueryConfigBuilder<ARGS_1 & ARGS_2 & ARGS_3>;
+): QueryConfigBuilder<[ARGS_1, ARGS_2, ARGS_3]>;
 export function mergeQueryConfigBuilders<
   ARGS_1 extends object | never,
   ARGS_2 extends object | never,
@@ -55,7 +55,7 @@ export function mergeQueryConfigBuilders<
   b: QueryConfigBuilder<ARGS_2>,
   c: QueryConfigBuilder<ARGS_3>,
   d: QueryConfigBuilder<ARGS_4>,
-): QueryConfigBuilder<ARGS_1 & ARGS_2 & ARGS_3 & ARGS_4>;
+): QueryConfigBuilder<[ARGS_1, ARGS_2, ARGS_3, ARGS_4]>;
 export function mergeQueryConfigBuilders<
   ARGS_1 extends object | never,
   ARGS_2 extends object | never,
@@ -68,7 +68,7 @@ export function mergeQueryConfigBuilders<
   c: QueryConfigBuilder<ARGS_3>,
   d: QueryConfigBuilder<ARGS_4>,
   e: QueryConfigBuilder<ARGS_5>,
-): QueryConfigBuilder<ARGS_1 & ARGS_2 & ARGS_3 & ARGS_4 & ARGS_5>;
+): QueryConfigBuilder<[ARGS_1, ARGS_2, ARGS_3, ARGS_4, ARGS_5]>;
 export function mergeQueryConfigBuilders<
   ARGS_1 extends object | never,
   ARGS_2 extends object | never,
@@ -83,7 +83,7 @@ export function mergeQueryConfigBuilders<
   d: QueryConfigBuilder<ARGS_4>,
   e: QueryConfigBuilder<ARGS_5>,
   f: QueryConfigBuilder<ARGS_6>,
-): QueryConfigBuilder<ARGS_1 & ARGS_2 & ARGS_3 & ARGS_4 & ARGS_5 & ARGS_6>;
+): QueryConfigBuilder<[ARGS_1, ARGS_2, ARGS_3, ARGS_4, ARGS_5, ARGS_6]>;
 export function mergeQueryConfigBuilders<
   ARGS_1 extends object | never,
   ARGS_2 extends object | never,
@@ -100,9 +100,7 @@ export function mergeQueryConfigBuilders<
   e: QueryConfigBuilder<ARGS_5>,
   f: QueryConfigBuilder<ARGS_6>,
   g: QueryConfigBuilder<ARGS_7>,
-): QueryConfigBuilder<
-  ARGS_1 & ARGS_2 & ARGS_3 & ARGS_4 & ARGS_5 & ARGS_6 & ARGS_7
->;
+): QueryConfigBuilder<[ARGS_1, ARGS_2, ARGS_3, ARGS_4, ARGS_5, ARGS_6, ARGS_7]>;
 export function mergeQueryConfigBuilders<
   ARGS_1 extends object | never,
   ARGS_2 extends object | never,
@@ -122,7 +120,7 @@ export function mergeQueryConfigBuilders<
   g: QueryConfigBuilder<ARGS_7>,
   h: QueryConfigBuilder<ARGS_8>,
 ): QueryConfigBuilder<
-  ARGS_1 & ARGS_2 & ARGS_3 & ARGS_4 & ARGS_5 & ARGS_6 & ARGS_7 & ARGS_8
+  [ARGS_1, ARGS_2, ARGS_3, ARGS_4, ARGS_5, ARGS_6, ARGS_7, ARGS_8]
 >;
 export function mergeQueryConfigBuilders<
   ARGS_1 extends object | never,
@@ -145,7 +143,7 @@ export function mergeQueryConfigBuilders<
   h: QueryConfigBuilder<ARGS_8>,
   i: QueryConfigBuilder<ARGS_9>,
 ): QueryConfigBuilder<
-  ARGS_1 & ARGS_2 & ARGS_3 & ARGS_4 & ARGS_5 & ARGS_6 & ARGS_7 & ARGS_8 & ARGS_9
+  [ARGS_1, ARGS_2, ARGS_3, ARGS_4, ARGS_5, ARGS_6, ARGS_7, ARGS_8, ARGS_9]
 >;
 export function mergeQueryConfigBuilders<
   ARGS_1 extends object | never,
@@ -170,24 +168,27 @@ export function mergeQueryConfigBuilders<
   i: QueryConfigBuilder<ARGS_9>,
   j: QueryConfigBuilder<ARGS_10>,
 ): QueryConfigBuilder<
-  ARGS_1 &
-    ARGS_2 &
-    ARGS_3 &
-    ARGS_4 &
-    ARGS_5 &
-    ARGS_6 &
-    ARGS_7 &
-    ARGS_8 &
-    ARGS_9 &
-    ARGS_10
+  [
+    ARGS_1,
+    ARGS_2,
+    ARGS_3,
+    ARGS_4,
+    ARGS_5,
+    ARGS_6,
+    ARGS_7,
+    ARGS_8,
+    ARGS_9,
+    ARGS_10,
+  ]
 >;
 export function mergeQueryConfigBuilders(
   ...builders: QueryConfigBuilder<object>[]
 ) {
-  return (args: object): QueryConfig => {
+  return (args: object[]): QueryConfig => {
     const context = new SqlTagParserContext();
-    for (const builder of builders) {
-      const partialQuery = builder(args);
+    for (let i = 0; i < args.length; i++) {
+      const builder = builders[i];
+      const partialQuery = builder(args[i]);
       context.mergeQueryConfig(partialQuery);
     }
 

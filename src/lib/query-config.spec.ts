@@ -1,5 +1,5 @@
 import { ColumnList, defineTextColumn } from './model';
-import { CreateSchemaSql, CreateTableSql } from './queries';
+import { CreateIndexSql, CreateSchemaSql, CreateTableSql } from './queries';
 import { mergeQueryConfigBuilders, QueryConfig } from './query-config';
 
 describe('(Unit) QueryConfig', () => {
@@ -58,7 +58,7 @@ describe('(Unit) mergeQueryConfigBuilders', () => {
       new QueryConfig('SELECT $1;', [args.b]);
     // Act
     const mergedBuilder = mergeQueryConfigBuilders(a, b);
-    const queryConfig = mergedBuilder({ a: 1, b: 'hello' });
+    const queryConfig = mergedBuilder([{ a: 1 }, { b: 'hello' }]);
     // Assert
     expect(queryConfig.text).toEqual('SELECT $1;SELECT $2;');
     expect(queryConfig.values).toEqual([1, 'hello']);
@@ -71,18 +71,60 @@ describe('(Unit) mergeQueryConfigBuilders', () => {
       CreateSchemaSql,
       CreateTableSql,
     );
-    const queryConfig = mergedBuilder({
-      schema: 'test_schema',
-      table: 'users',
-      columns: new ColumnList([
-        defineTextColumn('id'),
-        defineTextColumn('name'),
-      ]),
-    });
+    const queryConfig = mergedBuilder([
+      {
+        schema: 'test_schema',
+      },
+      {
+        schema: 'test_schema',
+        table: 'users',
+        columns: new ColumnList([
+          defineTextColumn('id'),
+          defineTextColumn('name'),
+        ]),
+      },
+    ]);
+
     // Assert
     expect(queryConfig.text).toEqual(
       'CREATE SCHEMA "test_schema";CREATE TABLE "test_schema"."users" ' +
         '("id" TEXT NOT NULL , "name" TEXT NOT NULL);',
+    );
+  });
+
+  it('should merge create schema, table and index', () => {
+    // Arrange
+    // Act
+    const mergedBuilder = mergeQueryConfigBuilders(
+      CreateSchemaSql,
+      CreateTableSql,
+      CreateIndexSql,
+    );
+    const queryConfig = mergedBuilder([
+      {
+        schema: 'test_schema',
+      },
+      {
+        schema: 'test_schema',
+        table: 'users',
+        columns: new ColumnList([
+          defineTextColumn('id'),
+          defineTextColumn('name'),
+        ]),
+      },
+      {
+        schema: 'test_schema',
+        table: 'users',
+        name: 'idx_users_name',
+        indexedNames: ['name'],
+      },
+    ]);
+
+    // Assert
+    expect(queryConfig.text).toEqual(
+      'CREATE SCHEMA "test_schema";CREATE TABLE "test_schema"."users" ' +
+        '("id" TEXT NOT NULL , "name" TEXT NOT NULL);CREATE INDEX ' +
+        '"idx_users_name" ON "test_schema"."users" USING btree ("name");',
     );
   });
 });
