@@ -27,3 +27,5 @@ export * from './unique/unique';
 export * from './concurrently/concurrently';
 export * from './only/only';
 export * from './returning/returning';
+export * from './table-column-definition/table-column-definition';
+export * from './column-definition/column-definition';

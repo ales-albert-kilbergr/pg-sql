@@ -28,6 +28,7 @@ export type SqlKeyword =
   | 'IF NOT EXISTS'
   | 'INSERT INTO'
   | 'NULL'
+  | 'NOT NULL'
   | '>'
   | '<'
   | '>='
@@ -37,4 +38,10 @@ export type SqlKeyword =
   | 'AUTHORIZATION'
   | 'UNIQUE'
   | 'CONCURRENTLY'
-  | 'ONLY';
+  | 'ONLY'
+  | 'TEXT'
+  | 'TIMESTAMPTZ'
+  | 'DEFAULT'
+  | 'CURRENT_TIMESTAMP'
+  | 'PRIMARY KEY'
+  | 'CONSTRAINT';

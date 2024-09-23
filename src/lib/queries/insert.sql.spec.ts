@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { ColumnList, defineBigintColumn, defineTextColumn } from '../column';
+import {
+  ColumnList,
+  defineBigintColumn,
+  defineTextColumn,
+} from '../model/column';
 import { type InsertArgs, InsertSql } from './insert.sql';
 
 describe('(Unit) InsertSql', () => {

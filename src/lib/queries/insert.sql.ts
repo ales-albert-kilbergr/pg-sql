@@ -1,4 +1,4 @@
-import type { ColumnList } from '../column';
+import type { ColumnList } from '../model/column';
 import { Identifier, InsertColumns, InsertValues, Returning } from '../nodes';
 import type { QueryConfig } from '../query-config';
 import { sql } from '../sql';

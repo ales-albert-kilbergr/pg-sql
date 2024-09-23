@@ -148,6 +148,12 @@ export class SqlTagParserContext {
     return this;
   }
 
+  public addComma(): this {
+    this.addFragment(', ');
+
+    return this;
+  }
+
   public closeBracket(): this {
     this.addFragment(')');
 

@@ -7,15 +7,13 @@ import {
 import type { QueryConfig } from '../query-config';
 import { sql } from '../sql';
 
-export declare namespace CreateSchema {
-  interface Args {
-    schema: string;
-    ifNotExists?: boolean;
-    authorization?: SchemaAuthorizationType | null;
-  }
+export interface CreateSchemaArgs {
+  schema: string;
+  ifNotExists?: boolean;
+  authorization?: SchemaAuthorizationType | null;
 }
 
-export function CreateSchema(args: CreateSchema.Args): QueryConfig {
+export function CreateSchemaSql(args: CreateSchemaArgs): QueryConfig {
   return sql`
     CREATE SCHEMA 
       ${IfNotExists(args.ifNotExists)}

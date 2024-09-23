@@ -11,5 +11,6 @@ export * from './table-exists.sql';
 export * from './count-table-rows.sql';
 export * from './insert.sql';
 export * from './delete-all-rows.sql';
+export * from './create-table.sql';
 // Column
 export * from './select-column-type.sql';

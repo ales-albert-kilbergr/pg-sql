@@ -11,12 +11,15 @@ export interface NumericColumnProps {
   scale: number;
 }
 
-export interface IColumn<T extends ColumnType, D, O extends object = object> {
+export interface Column<T extends ColumnType, D, O extends object = object> {
   type: T;
   name: string;
   nullable: boolean;
   propertyKey: string;
-  default?: () => D;
+  /**
+   * SQL expression of default value
+   */
+  defaultExpression?: string;
   options?: O;
   serialize?: (value: D) => unknown;
   parse?: (value: unknown) => D;
@@ -25,6 +28,7 @@ export interface IColumn<T extends ColumnType, D, O extends object = object> {
 export interface ColumnProps {
   nullable?: boolean;
   propertyKey?: string;
+  defaultExpression?: string;
 }
 
 export interface WithLengthColumnProps {
@@ -38,37 +42,40 @@ export interface WithPrecisionColumnProps {
 
 export function defineSmallintColumn(
   name: string,
-  props: ColumnProps = {},
-): IColumn<'smallint', number> {
+  { nullable, propertyKey, defaultExpression }: ColumnProps = {},
+): Column<'smallint', number> {
   return {
     type: 'smallint',
     name,
-    nullable: props.nullable ?? false,
-    propertyKey: props.propertyKey ?? name,
+    nullable: nullable ?? false,
+    propertyKey: propertyKey ?? name,
+    defaultExpression,
   };
 }
 
 export function defineIntegerColumn(
   name: string,
-  props: ColumnProps = {},
-): IColumn<'integer', number> {
+  { nullable, propertyKey, defaultExpression }: ColumnProps = {},
+): Column<'integer', number> {
   return {
     type: 'integer',
     name,
-    nullable: props.nullable ?? false,
-    propertyKey: props.propertyKey ?? name,
+    nullable: nullable ?? false,
+    propertyKey: propertyKey ?? name,
+    defaultExpression,
   };
 }
 
 export function defineBigintColumn(
   name: string,
-  props: ColumnProps = {},
-): IColumn<'bigint', bigint> {
+  { nullable, propertyKey, defaultExpression }: ColumnProps = {},
+): Column<'bigint', bigint> {
   return {
     type: 'bigint',
     name,
-    nullable: props.nullable ?? false,
-    propertyKey: props.propertyKey ?? name,
+    nullable: nullable ?? false,
+    propertyKey: propertyKey ?? name,
+    defaultExpression,
     serialize: (value: bigint) => value.toString(),
     parse: (value: unknown) =>
       typeof value === 'string' ? BigInt(value) : BigInt(0),
@@ -77,37 +84,51 @@ export function defineBigintColumn(
 
 export function defineNumericColumn(
   name: string,
-  props: ColumnProps & WithPrecisionColumnProps,
-): IColumn<'numeric', number> {
+  {
+    nullable,
+    propertyKey,
+    defaultExpression,
+    ...otherProps
+  }: ColumnProps & WithPrecisionColumnProps,
+): Column<'numeric', number> {
   return {
     type: 'numeric',
     name,
-    nullable: props.nullable ?? false,
-    propertyKey: props.propertyKey ?? name,
+    nullable: nullable ?? false,
+    propertyKey: propertyKey ?? name,
+    defaultExpression,
+    options: otherProps,
   };
 }
 
 export function defineTextColumn(
   name: string,
-  { nullable, propertyKey }: ColumnProps = {},
-): IColumn<'text', string> {
+  { nullable, propertyKey, defaultExpression }: ColumnProps = {},
+): Column<'text', string> {
   return {
     type: 'text',
     name,
     nullable: nullable ?? false,
     propertyKey: propertyKey ?? name,
+    defaultExpression,
   };
 }
 
 export function defineVarcharColumn(
   name: string,
-  { nullable, propertyKey, ...otherProps }: ColumnProps & WithLengthColumnProps,
-): IColumn<'varchar', string, WithLengthColumnProps> {
+  {
+    nullable,
+    propertyKey,
+    defaultExpression,
+    ...otherProps
+  }: ColumnProps & WithLengthColumnProps,
+): Column<'varchar', string, WithLengthColumnProps> {
   return {
     type: 'varchar',
     name,
     nullable: nullable ?? false,
     propertyKey: propertyKey ?? name,
+    defaultExpression,
     options: otherProps,
   };
 }
@@ -116,11 +137,12 @@ export function defineVarcharColumn(
 
 export function defineTimestampWithTimeZoneColumn(
   name: string,
-  { nullable, propertyKey }: ColumnProps = {},
-): IColumn<'timestampz', Date> {
+  { nullable, propertyKey, defaultExpression }: ColumnProps = {},
+): Column<'timestampz', Date> {
   return {
     type: 'timestampz',
     name,
+    defaultExpression,
     nullable: nullable ?? false,
     propertyKey: propertyKey ?? name,
   };
@@ -128,20 +150,22 @@ export function defineTimestampWithTimeZoneColumn(
 
 export function defineCreatedAtColumn({
   propertyKey,
-}: Omit<ColumnProps, 'nullable'> = {}): IColumn<'timestampz', Date> {
+}: Omit<ColumnProps, 'nullable'> = {}): Column<'timestampz', Date> {
   const name = 'created_at';
 
   return defineTimestampWithTimeZoneColumn(name, {
     propertyKey: propertyKey ?? name,
+    defaultExpression: 'CURRENT_TIMESTAMP',
   });
 }
 
 export function defineUpdatedAtColumn({
   propertyKey,
-}: Omit<ColumnProps, 'nullable'> = {}): IColumn<'timestampz', Date> {
+}: Omit<ColumnProps, 'nullable'> = {}): Column<'timestampz', Date> {
   const name = 'updated_at';
 
   return defineTimestampWithTimeZoneColumn(name, {
     propertyKey: propertyKey ?? name,
+    defaultExpression: 'CURRENT_TIMESTAMP',
   });
 }
