@@ -9,6 +9,7 @@ import {
   type WithLengthColumnProps,
   type IColumn,
   type WithPrecisionColumnProps,
+  defineTimestampWithTimeZoneColumn,
 } from './column';
 import type { ColumnType } from './column-type';
 
@@ -64,6 +65,7 @@ export function Column(
             nullable,
           }),
         );
+        break;
       case 'numeric':
         metadata.add(
           target.constructor,
@@ -74,6 +76,7 @@ export function Column(
             ...otherOptions,
           }),
         );
+        break;
       case 'text':
         metadata.add(
           target.constructor,
@@ -82,6 +85,16 @@ export function Column(
             nullable,
           }),
         );
+        break;
+      case 'timestampz':
+        metadata.add(
+          target.constructor,
+          defineTimestampWithTimeZoneColumn(columnName, {
+            propertyKey,
+            nullable,
+          }),
+        );
+
       default:
         throw new TypeError(
           `Cannot define new column. The type "${type}" is ` +
@@ -92,3 +105,33 @@ export function Column(
 }
 
 Column.metadata = metadata;
+
+export function CreatedAtColumn(): PropertyDecorator {
+  return function (target: object, propertyKey: string | symbol): void {
+    if (typeof propertyKey === 'symbol') {
+      throw new TypeError('Symbol properties are not supported');
+    }
+
+    metadata.add(
+      target.constructor,
+      defineTimestampWithTimeZoneColumn('created_at', {
+        propertyKey,
+      }),
+    );
+  };
+}
+
+export function UpdatedAtColumn(): PropertyDecorator {
+  return function (target: object, propertyKey: string | symbol): void {
+    if (typeof propertyKey === 'symbol') {
+      throw new TypeError('Symbol properties are not supported');
+    }
+
+    metadata.add(
+      target.constructor,
+      defineTimestampWithTimeZoneColumn('updated_at', {
+        propertyKey,
+      }),
+    );
+  };
+}

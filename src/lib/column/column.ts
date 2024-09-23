@@ -11,18 +11,15 @@ export interface NumericColumnProps {
   scale: number;
 }
 
-export interface IColumn<
-  TYPE extends ColumnType,
-  DATA_TYPE,
-  O extends object = object,
-> {
-  type: TYPE;
+export interface IColumn<T extends ColumnType, D, O extends object = object> {
+  type: T;
   name: string;
   nullable: boolean;
   propertyKey: string;
+  default?: () => D;
   options?: O;
-  serialize?: (value: DATA_TYPE) => unknown;
-  parse?: (value: unknown) => DATA_TYPE;
+  serialize?: (value: D) => unknown;
+  parse?: (value: unknown) => D;
 }
 
 export interface ColumnProps {
@@ -127,4 +124,24 @@ export function defineTimestampWithTimeZoneColumn(
     nullable: nullable ?? false,
     propertyKey: propertyKey ?? name,
   };
+}
+
+export function defineCreatedAtColumn({
+  propertyKey,
+}: Omit<ColumnProps, 'nullable'> = {}): IColumn<'timestampz', Date> {
+  const name = 'created_at';
+
+  return defineTimestampWithTimeZoneColumn(name, {
+    propertyKey: propertyKey ?? name,
+  });
+}
+
+export function defineUpdatedAtColumn({
+  propertyKey,
+}: Omit<ColumnProps, 'nullable'> = {}): IColumn<'timestampz', Date> {
+  const name = 'updated_at';
+
+  return defineTimestampWithTimeZoneColumn(name, {
+    propertyKey: propertyKey ?? name,
+  });
 }
