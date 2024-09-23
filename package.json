@@ -1,7 +1,7 @@
 {
   "name": "@kilbergr/pg-sql",
   "description": "Postgres SQL tag",
-  "version": "0.1.0-Dev.22",
+  "version": "0.1.0-Dev.23",
   "author": {
     "name": "Kilbergr",
     "email": "ales.albert@kilbergr.eu"
@@ -52,6 +52,7 @@
     "zx": "^8.1.4"
   },
   "dependencies": {
+    "@kilbergr/metadata": "^0.1.0-Alpha.8",
     "@kilbergr/tagged-types": "^0.1.0-Alpha.3",
     "pg": "^8.12.0"
   },

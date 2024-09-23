@@ -765,10 +765,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kilbergr/metadata@npm:^0.1.0-Alpha.8":
+  version: 0.1.0-Alpha.8
+  resolution: "@kilbergr/metadata@npm:0.1.0-Alpha.8"
+  checksum: 10/dfc4be09292642d7314bcb869e7a7de263a93db284531b617cafc0e56dfe7a55acb5532ff571e9b56f38b0fbec5282bbe0c82bf4b9a26bd2071ebcb34076d582
+  languageName: node
+  linkType: hard
+
 "@kilbergr/pg-sql@workspace:.":
   version: 0.0.0-use.local
   resolution: "@kilbergr/pg-sql@workspace:."
   dependencies:
+    "@kilbergr/metadata": "npm:^0.1.0-Alpha.8"
     "@kilbergr/tagged-types": "npm:^0.1.0-Alpha.3"
     "@types/jest": "npm:^29.5.12"
     "@types/jsonwebtoken": "npm:^9.0.6"
