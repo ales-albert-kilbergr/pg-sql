@@ -30,7 +30,6 @@ describe('(Unit) CreateTableSql', () => {
         defineTextColumn('name'),
       ]),
       primaryKey: {
-        table: 'users',
         columns: ['id'],
       },
     };
@@ -57,7 +56,6 @@ describe('(Unit) CreateTableSql', () => {
         defineTextColumn('name'),
       ]),
       primaryKey: {
-        table: 'users',
         columns: ['id', 'name'],
       },
     };
@@ -84,7 +82,6 @@ describe('(Unit) CreateTableSql', () => {
         defineTextColumn('name'),
       ]),
       primaryKey: {
-        table: 'users',
         columns: ['id'],
         constraintName: 'pk_users_custom',
       },

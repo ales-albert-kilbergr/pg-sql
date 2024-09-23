@@ -7,7 +7,7 @@ import {
   type PrimaryKeyArgs,
   TableColumnDefinition,
 } from '../nodes';
-import { TableUniqueConstraintList } from '../nodes/table-unique-constraint-list/table-unique-constraint-list';
+import { TableUniqueConstraintList } from '../nodes';
 import type { QueryConfig } from '../query-config';
 import { sql } from '../sql';
 

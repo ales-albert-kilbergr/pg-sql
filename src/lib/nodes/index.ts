@@ -29,3 +29,4 @@ export * from './only/only';
 export * from './returning/returning';
 export * from './table-column-definition/table-column-definition';
 export * from './column-definition/column-definition';
+export * from './table-unique-constraint-list/table-unique-constraint-list';
