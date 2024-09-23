@@ -1,14 +1,12 @@
 import type { QueryConfig } from '../query-config';
 import { sql } from '../sql';
 
-export declare namespace TableExists {
-  interface Args {
-    schema: string;
-    table: string;
-  }
+export interface TableExistsArgs {
+  schema: string;
+  table: string;
 }
 
-export function TableExists(args: TableExists.Args): QueryConfig {
+export function TableExistsSql(args: TableExistsArgs): QueryConfig {
   return sql`
     SELECT EXISTS (
       SELECT 1

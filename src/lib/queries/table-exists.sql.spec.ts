@@ -1,14 +1,14 @@
-import { TableExists } from './table-exists.sql';
+import { type TableExistsArgs, TableExistsSql } from './table-exists.sql';
 
 describe('(Unit) TableExists', () => {
   it('should build a correct sql query text with just a schema and table', () => {
     // Arrange
-    const args: TableExists.Args = {
+    const args: TableExistsArgs = {
       schema: 'testSchemaName',
       table: 'testTableName',
     };
     // Act
-    const result = TableExists(args);
+    const result = TableExistsSql(args);
     // Assert
     expect(result).toMatchObject({
       text:

@@ -1,13 +1,11 @@
 import type { QueryConfig } from '../query-config';
 import { sql } from '../sql';
 
-export declare namespace SchemaExists {
-  interface Args {
-    schema: string;
-  }
+export interface SchemaExistsArgs {
+  schema: string;
 }
 
-export function SchemaExists(args: SchemaExists.Args): QueryConfig {
+export function SchemaExistsSql(args: SchemaExistsArgs): QueryConfig {
   return sql`
     SELECT EXISTS (
       SELECT 1

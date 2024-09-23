@@ -1,13 +1,13 @@
-import { SchemaExists } from './schema-exists.sql';
+import { SchemaExistsSql, type SchemaExistsArgs } from './schema-exists.sql';
 
 describe('(Unit) SchemaExists', () => {
   it('should build a correct sql query text with just a schema', () => {
     // Arrange
-    const args: SchemaExists.Args = {
+    const args: SchemaExistsArgs = {
       schema: 'testSchemaName',
     };
     // Act
-    const result = SchemaExists(args);
+    const result = SchemaExistsSql(args);
     // Assert
     expect(result).toMatchObject({
       text:

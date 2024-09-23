@@ -2,15 +2,12 @@ import { Cascade, Identifier, IfExists } from '../nodes';
 import type { QueryConfig } from '../query-config';
 import { sql } from '../sql';
 
-export declare namespace DropSchema {
-  interface Args {
-    schema: string;
-    ifExists?: boolean;
-    cascade?: boolean;
-  }
+export interface DropSchemaArgs {
+  schema: string;
+  ifExists?: boolean;
+  cascade?: boolean;
 }
-
-export function DropSchema(args: DropSchema.Args): QueryConfig {
+export function DropSchemaSql(args: DropSchemaArgs): QueryConfig {
   return sql`
     DROP SCHEMA 
       ${IfExists(args.ifExists)}

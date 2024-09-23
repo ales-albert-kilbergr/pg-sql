@@ -1,15 +1,13 @@
 import type { QueryConfig } from '../query-config';
 import { sql } from '../sql';
 
-export declare namespace SelectColumnType {
-  interface Args {
-    schema: string;
-    table: string;
-    column: string;
-  }
+export interface SelectColumnTypeArgs {
+  schema: string;
+  table: string;
+  column: string;
 }
 
-export function SelectColumnType(args: SelectColumnType.Args): QueryConfig {
+export function SelectColumnTypeSql(args: SelectColumnTypeArgs): QueryConfig {
   return sql`
     SELECT data_type
     FROM information_schema.columns WHERE 

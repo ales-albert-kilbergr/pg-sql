@@ -1,15 +1,18 @@
-import { SelectColumnType } from './select-column-type.sql';
+import {
+  type SelectColumnTypeArgs,
+  SelectColumnTypeSql,
+} from './select-column-type.sql';
 
 describe('(Unit) SelectColumnType', () => {
   it('should build a correct sql query text', () => {
     // Arrange
-    const args: SelectColumnType.Args = {
+    const args: SelectColumnTypeArgs = {
       schema: 'testSchemaName',
       table: 'testTableName',
       column: 'testColumnName',
     };
     // Act
-    const result = SelectColumnType(args);
+    const result = SelectColumnTypeSql(args);
 
     console.log(result);
     // Assert
