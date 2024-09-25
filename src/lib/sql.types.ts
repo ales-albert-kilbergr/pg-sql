@@ -13,5 +13,5 @@ export interface SqlTemplateTagOptions {
 }
 
 export interface SqlTemplateNode {
-  parse: (context: SqlTagParserContext) => void;
+  toSql: (context: SqlTagParserContext) => QueryConfig;
 }

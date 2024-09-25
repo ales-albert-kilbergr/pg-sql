@@ -1,171 +1,169 @@
-import type { ColumnType } from './column-type';
+import { Identifier } from '../identifier';
+import {
+  ColumnConstraint,
+  ColumnConstraintDiscriminant,
+  type ColumnDefaultConstraintArgs,
+} from '../column-constraint';
+import type { DataType, DataTypeDiscriminant } from '../data-type';
+import { DatabaseObject } from '../database-object/database-object';
+import type { identifier } from '../identifier';
+import type { Schema } from '../schema';
+import type { Table } from '../table/table';
+import type {
+  TableCheckConstraintArgs,
+  TableConstraint,
+  TableConstraintDiscriminant,
+  TableForeignKeyConstraintArgs,
+  TablePrimaryKeyConstraintArgs,
+  TableUniqueConstraintArgs,
+} from '../table-constraint';
 
-export interface VarcharColumnProps {
-  columnType: 'character varying' | 'varchar';
-  length: number;
-}
+export class Column<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  D extends DataType<any, any> = DataType<DataTypeDiscriminant, unknown>,
+> extends DatabaseObject<Table> {
+  public declare parent: Table;
 
-export interface NumericColumnProps {
-  columnType: 'numeric';
-  precision: number;
-  scale: number;
-}
+  public readonly type: D;
 
-export interface Column<T extends ColumnType, D, O extends object = object> {
-  type: T;
-  name: string;
-  nullable: boolean;
-  propertyKey: string;
   /**
-   * SQL expression of default value
+   * The property key of the column.
    */
-  defaultExpression?: string;
-  options?: O;
-  serialize?: (value: D) => unknown;
-  parse?: (value: unknown) => D;
-}
+  public propertyKey: string;
 
-export interface ColumnProps {
-  nullable?: boolean;
-  propertyKey?: string;
-  defaultExpression?: string;
-}
+  private _nullable:
+    | ColumnConstraint<ColumnConstraintDiscriminant.NOT_NULL>
+    | ColumnConstraint<ColumnConstraintDiscriminant.NULL> =
+    new ColumnConstraint<ColumnConstraintDiscriminant.NOT_NULL>(
+      ColumnConstraintDiscriminant.NOT_NULL,
+      Identifier(`nn_${this.table.name}_${this.name}`),
+      this,
+      {},
+    );
 
-export interface WithLengthColumnProps {
-  length: number;
-}
+  private _default?: ColumnConstraint<ColumnConstraintDiscriminant.DEFAULT>;
 
-export interface WithPrecisionColumnProps {
-  precision: number;
-  scale: number;
-}
+  public constructor(type: D, name: identifier, table: Table) {
+    super(name, table);
 
-export function defineSmallintColumn(
-  name: string,
-  { nullable, propertyKey, defaultExpression }: ColumnProps = {},
-): Column<'smallint', number> {
-  return {
-    type: 'smallint',
-    name,
-    nullable: nullable ?? false,
-    propertyKey: propertyKey ?? name,
-    defaultExpression,
-  };
-}
+    this.type = type;
+    this.propertyKey = name;
+  }
 
-export function defineIntegerColumn(
-  name: string,
-  { nullable, propertyKey, defaultExpression }: ColumnProps = {},
-): Column<'integer', number> {
-  return {
-    type: 'integer',
-    name,
-    nullable: nullable ?? false,
-    propertyKey: propertyKey ?? name,
-    defaultExpression,
-  };
-}
+  public get table(): Table {
+    return this.parent;
+  }
 
-export function defineBigintColumn(
-  name: string,
-  { nullable, propertyKey, defaultExpression }: ColumnProps = {},
-): Column<'bigint', bigint> {
-  return {
-    type: 'bigint',
-    name,
-    nullable: nullable ?? false,
-    propertyKey: propertyKey ?? name,
-    defaultExpression,
-    serialize: (value: bigint) => value.toString(),
-    parse: (value: unknown) =>
-      typeof value === 'string' ? BigInt(value) : BigInt(0),
-  };
-}
+  public get schema(): Schema {
+    return this.table.schema;
+  }
 
-export function defineNumericColumn(
-  name: string,
-  {
-    nullable,
-    propertyKey,
-    defaultExpression,
-    ...otherProps
-  }: ColumnProps & WithPrecisionColumnProps,
-): Column<'numeric', number> {
-  return {
-    type: 'numeric',
-    name,
-    nullable: nullable ?? false,
-    propertyKey: propertyKey ?? name,
-    defaultExpression,
-    options: otherProps,
-  };
-}
+  // Getters -------------------------------------------------------------------
+  public get uniqueConstraintName(): identifier {
+    return Identifier(`${this.table.name}_${this.name}_key`);
+  }
+  /**
+   * Get a default check constraint name for the column.
+   */
+  public get checkConstraintName(): identifier {
+    return Identifier(`${this.table.name}_${this.name}_check`);
+  }
 
-export function defineTextColumn(
-  name: string,
-  { nullable, propertyKey, defaultExpression }: ColumnProps = {},
-): Column<'text', string> {
-  return {
-    type: 'text',
-    name,
-    nullable: nullable ?? false,
-    propertyKey: propertyKey ?? name,
-    defaultExpression,
-  };
-}
+  public get default():
+    | ColumnConstraint<ColumnConstraintDiscriminant.DEFAULT>
+    | undefined {
+    return this._default;
+  }
 
-export function defineVarcharColumn(
-  name: string,
-  {
-    nullable,
-    propertyKey,
-    defaultExpression,
-    ...otherProps
-  }: ColumnProps & WithLengthColumnProps,
-): Column<'varchar', string, WithLengthColumnProps> {
-  return {
-    type: 'varchar',
-    name,
-    nullable: nullable ?? false,
-    propertyKey: propertyKey ?? name,
-    defaultExpression,
-    options: otherProps,
-  };
-}
+  // Constraint factories ------------------------------------------------------
+  public definePrimaryKey(
+    args: Omit<TablePrimaryKeyConstraintArgs, 'columns'> = {},
+  ): TableConstraint<TableConstraintDiscriminant.PRIMARY_KEY> {
+    return this.table.definePrimaryKey(this.table.uniqueConstraintName, {
+      columns: [this.name],
+      ...args,
+    });
+  }
 
-// Time and date columns
+  public defineUniqueKey(
+    args: Omit<TableUniqueConstraintArgs, 'columns'> = {},
+  ): TableConstraint<TableConstraintDiscriminant.UNIQUE_KEY> {
+    return this.table.defineUniqueConstraint(this.uniqueConstraintName, {
+      columns: [this.name],
+      ...args,
+    });
+  }
 
-export function defineTimestampWithTimeZoneColumn(
-  name: string,
-  { nullable, propertyKey, defaultExpression }: ColumnProps = {},
-): Column<'timestampz', Date> {
-  return {
-    type: 'timestampz',
-    name,
-    defaultExpression,
-    nullable: nullable ?? false,
-    propertyKey: propertyKey ?? name,
-  };
-}
+  public defineCheckConstraint(
+    args: Omit<TableCheckConstraintArgs, 'columns'>,
+  ): TableConstraint<TableConstraintDiscriminant.CHECK> {
+    return this.table.defineCheckConstraint(this.checkConstraintName, {
+      ...args,
+    });
+  }
 
-export function defineCreatedAtColumn({
-  propertyKey,
-}: Omit<ColumnProps, 'nullable'> = {}): Column<'timestampz', Date> {
-  const name = 'created_at';
+  public defineNotNull(): ColumnConstraint<ColumnConstraintDiscriminant.NOT_NULL> {
+    this._nullable =
+      new ColumnConstraint<ColumnConstraintDiscriminant.NOT_NULL>(
+        ColumnConstraintDiscriminant.NOT_NULL,
+        Identifier(`nn_${this.table.name}_${this.name}`),
+        this,
+        {},
+      );
 
-  return defineTimestampWithTimeZoneColumn(name, {
-    propertyKey: propertyKey ?? name,
-    defaultExpression: 'CURRENT_TIMESTAMP',
-  });
-}
+    return this._nullable;
+  }
 
-export function defineUpdatedAtColumn({
-  propertyKey,
-}: Omit<ColumnProps, 'nullable'> = {}): Column<'timestampz', Date> {
-  const name = 'updated_at';
+  public defineNull(): ColumnConstraint<ColumnConstraintDiscriminant.NULL> {
+    this._nullable = new ColumnConstraint<ColumnConstraintDiscriminant.NULL>(
+      ColumnConstraintDiscriminant.NULL,
+      Identifier(`n_${this.table.name}_${this.name}`),
+      this,
+      {},
+    );
 
-  return defineTimestampWithTimeZoneColumn(name, {
-    propertyKey: propertyKey ?? name,
-    defaultExpression: 'CURRENT_TIMESTAMP',
-  });
+    return this._nullable;
+  }
+
+  public defineDefault(
+    args: ColumnDefaultConstraintArgs,
+  ): ColumnConstraint<ColumnConstraintDiscriminant.DEFAULT> {
+    this._default = new ColumnConstraint<ColumnConstraintDiscriminant.DEFAULT>(
+      ColumnConstraintDiscriminant.DEFAULT,
+      Identifier(`d_${this.table.name}_${this.name}`),
+      this,
+      args,
+    );
+
+    return this._default;
+  }
+
+  public defineForeignKey(
+    args: Omit<TableForeignKeyConstraintArgs, 'columns'>,
+  ): TableConstraint<TableConstraintDiscriminant.FOREIGN_KEY> {
+    const constraintName = Identifier(`${this.table.name}_${this.name}_fkey`);
+
+    return this.table.defineForeignKey(constraintName, {
+      columns: [this.name],
+      ...args,
+    });
+  }
+
+  // Constraint checks ---------------------------------------------------------
+  public isInPrimaryKey(): boolean {
+    return this.table.primaryKey?.args.columns.includes(this.name) ?? false;
+  }
+
+  public isUniqueKey(): boolean {
+    return this.table.uniqueKeys.has(this.uniqueConstraintName);
+  }
+
+  public isNullable(): boolean {
+    return this._nullable.type === ColumnConstraintDiscriminant.NULL;
+  }
+
+  // Constraint removal --------------------------------------------------------
+  public removeDefaultConstraint(): void {
+    this._default = undefined;
+  }
 }

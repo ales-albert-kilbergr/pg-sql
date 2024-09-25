@@ -29,4 +29,15 @@ describe('(Unit) Between', () => {
     // Assert
     expect(context.values).toEqual(['1', '2']);
   });
+
+  it('should convert date values to strings', () => {
+    // Arrange
+    const context = new SqlTagParserContext();
+    const date1 = new Date();
+    const date2 = new Date();
+    // Act
+    Between(date1, date2)(context);
+    // Assert
+    expect(context.values).toEqual([date1.toISOString(), date2.toISOString()]);
+  });
 });

@@ -3,15 +3,15 @@ import { Identifier, InsertColumns, InsertValues, Returning } from '../nodes';
 import type { QueryConfig } from '../query-config';
 import { sql } from '../sql';
 
-export interface InsertArgs {
-  data: object | object[];
+export interface InsertArgs<D extends object = object> {
+  data: D | D[];
   schema: string;
   table: string;
   columns: ColumnList;
   returning?: string | string[];
 }
 
-export function InsertSql(args: InsertArgs): QueryConfig {
+export function InsertSql<D extends object>(args: InsertArgs<D>): QueryConfig {
   const dataArray = Array.isArray(args.data) ? args.data : [args.data];
   const returningArr =
     args.returning !== undefined

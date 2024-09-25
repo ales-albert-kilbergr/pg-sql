@@ -177,4 +177,35 @@ describe('(Unit) where', () => {
     expect(context.toSqlText()).toEqual('WHERE "id" IN ($1, NULL, $2)');
     expect(context.values).toEqual([1, 2]);
   });
+
+  it('should build an AND with more complex conditions', () => {
+    // Arrange
+    const context = new SqlTagParserContext();
+    const condition: Condition = {
+      id: { $gt: 1, $lt: 10 },
+      name: 'test',
+    };
+    // Act
+    context.pipe(Where(condition));
+    // Assert
+    expect(context.toSqlText()).toEqual(
+      'WHERE "id" > $1 AND "id" < $2 AND "name" = $3',
+    );
+    expect(context.values).toEqual([1, 10, 'test']);
+  });
+
+  it('should build a BETWEEN with two dates', () => {
+    // Arrange
+    const context = new SqlTagParserContext();
+    const date1 = new Date('2021-01-01');
+    const date2 = new Date('2021-12-31');
+    const condition: Condition = {
+      date: { $between: [date1, date2] },
+    };
+    // Act
+    context.pipe(Where(condition));
+    // Assert
+    expect(context.toSqlText()).toEqual('WHERE "date" BETWEEN $1 AND $2');
+    expect(context.values).toEqual([date1.toISOString(), date2.toISOString()]);
+  });
 });

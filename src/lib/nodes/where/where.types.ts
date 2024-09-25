@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 // eslint-disable-next-line @typescript-eslint/no-namespace
-export type NumericType = number | bigint;
+export type NumericType = number | bigint | Date;
 
 export type AnyValueType = NumericType | string | boolean | null;
 
@@ -82,7 +82,7 @@ export type TextOptions =
   | NotILikeOptions
   | IsNullOptions;
 
-export type NumericOptions<NUM extends bigint | number = number> =
+export type NumericOptions<NUM extends bigint | number | Date = number> =
   | BetweenOptions<NUM>
   | NotBetweenOptions<NUM>
   | GteOptions<NUM>
@@ -100,7 +100,9 @@ export type Options<V extends AnyValueType = AnyValueType> = V extends string
         ? BaseOptions<V> | NumericOptions<V>
         : V extends number
           ? BaseOptions<V> | NumericOptions<V>
-          : never;
+          : V extends Date
+            ? BaseOptions<V> | NumericOptions<V>
+            : never;
 
 export type PropertyCondition<V extends AnyValueType = AnyValueType> = Record<
   string,

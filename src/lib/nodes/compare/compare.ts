@@ -3,29 +3,39 @@ import type { SqlTagParserContext } from '../../parser-context';
 
 export function Compare(
   property: string,
-  value: Numeric | string | boolean,
+  value: Numeric | string | boolean | Date,
   operator: '>' | '<' | '>=' | '<=' | '=' | '<>',
 ) {
   return (context: SqlTagParserContext): void => {
-    context.addIdentifier(property).addKeyword(operator).bindValue(value);
+    const valueStr = value instanceof Date ? value.toISOString() : value;
+
+    context.addIdentifier(property).addKeyword(operator).bindValue(valueStr);
   };
 }
 
-Compare.Gt = (property: string, value: Numeric): ReturnType<typeof Compare> =>
-  Compare(property, value, '>');
+Compare.Gt = (
+  property: string,
+  value: Numeric | Date,
+): ReturnType<typeof Compare> => Compare(property, value, '>');
 
-Compare.Gte = (property: string, value: Numeric): ReturnType<typeof Compare> =>
-  Compare(property, value, '>=');
+Compare.Gte = (
+  property: string,
+  value: Numeric | Date,
+): ReturnType<typeof Compare> => Compare(property, value, '>=');
 
-Compare.Lt = (property: string, value: Numeric): ReturnType<typeof Compare> =>
-  Compare(property, value, '<');
+Compare.Lt = (
+  property: string,
+  value: Numeric | Date,
+): ReturnType<typeof Compare> => Compare(property, value, '<');
 
-Compare.Lte = (property: string, value: Numeric): ReturnType<typeof Compare> =>
-  Compare(property, value, '<=');
+Compare.Lte = (
+  property: string,
+  value: Numeric | Date,
+): ReturnType<typeof Compare> => Compare(property, value, '<=');
 
 Compare.Eq = (
   property: string,
-  value: Numeric | string | boolean | null,
+  value: Numeric | string | boolean | null | Date,
 ): ReturnType<typeof Compare> =>
   value === null
     ? (context): void => {
@@ -35,7 +45,7 @@ Compare.Eq = (
 
 Compare.Neq = (
   property: string,
-  value: Numeric | string | boolean | null,
+  value: Numeric | string | boolean | null | Date,
 ): ReturnType<typeof Compare> =>
   value === null
     ? (context): void => {

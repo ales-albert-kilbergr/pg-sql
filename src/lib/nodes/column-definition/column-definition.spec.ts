@@ -29,7 +29,7 @@ describe('(Unit) ColumnDefinition', () => {
 
     // Assert
     expect(context.toSqlText()).toBe(
-      '"created_at" TIMESTAMPZ NOT NULL DEFAULT CURRENT_TIMESTAMP',
+      '"created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP',
     );
   });
 });

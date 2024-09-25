@@ -115,7 +115,12 @@ function parseWhereCondition(
     } else if (key === '$notLike') {
       assertOperatorProperty(key, property);
 
-      context.pipe(Identifier(property), Keyword('NOT'), Keyword('LIKE'), Value(value));
+      context.pipe(
+        Identifier(property),
+        Keyword('NOT'),
+        Keyword('LIKE'),
+        Value(value),
+      );
     } else if (key === '$iLike') {
       assertOperatorProperty(key, property);
 

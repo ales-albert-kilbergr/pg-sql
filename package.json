@@ -1,7 +1,7 @@
 {
   "name": "@kilbergr/pg-sql",
   "description": "Postgres SQL tag",
-  "version": "0.1.0-Dev.27",
+  "version": "0.1.0-Dev.28",
   "author": {
     "name": "Kilbergr",
     "email": "ales.albert@kilbergr.eu"
@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "@kilbergr/metadata": "^0.1.0-Alpha.8",
-    "@kilbergr/tagged-types": "^0.1.0-Alpha.3",
+    "@kilbergr/tagged-types": "^0.1.0-Alpha.5",
     "pg": "^8.12.0"
   },
   "packageManager": "yarn@4.3.1+sha256.2535167e742927e1d2a1610d5004576e4e8f764d2ca5470d19536790f55cd6e2"

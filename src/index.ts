@@ -5,5 +5,6 @@ export * from './lib/sql.types';
 export * from './lib/query-config';
 export * from './lib/sql';
 export * from './lib/queries';
-export * from './lib/model/column';
+export * from './lib/model';
 export * from './lib/entity';
+export * from './lib/data-processors';

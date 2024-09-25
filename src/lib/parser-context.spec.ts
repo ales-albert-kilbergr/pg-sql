@@ -216,7 +216,7 @@ describe('(Unit) SqlTagParserContext', () => {
       context.parseNode(node);
       // Assert
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      expect(node.parse).toHaveBeenCalledWith(context);
+      expect(node.toSql).toHaveBeenCalledWith(context);
     });
 
     it('should merge it if the node is a QueryConfig', () => {

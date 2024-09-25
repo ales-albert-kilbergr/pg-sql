@@ -1,9 +1,9 @@
 import { escapeIdentifier } from 'pg';
 import { formatSqlText } from './helpers';
-import { Literal, Value } from './nodes';
 import { QueryConfig } from './query-config';
 import type { SqlTemplateNode } from './sql.types';
 import type { SqlKeyword } from './sql-keyword';
+import { renderLiteral } from './renderers';
 
 const VALUE_BINDING_REG_EXP = /(\.\.\.)?:$/;
 const INLINE_VALUE_BINDING_REG_EXP = /(\.\.\.)?:L$/;
@@ -87,7 +87,7 @@ export class SqlTagParserContext {
     // Check if the node is an instance of SqlTemplateNode. If yes, we will parse
     // let it to parse the fragments and values on its own.
     else if (this.implementsSqlTemplateNode(node)) {
-      node.parse(this);
+      this.mergeQueryConfig(node.toSql(this));
     }
     // If the last fragment is not a binding placeholder then we have to check
     // what kind of node we have and choose an appropriate parsing strategy.
@@ -107,7 +107,7 @@ export class SqlTagParserContext {
       // but to be treated as an array input for a single field.
       const isArrayValueType = lastFragment.endsWith('...:');
       this.replaceLastFragment(lastFragment.replace(VALUE_BINDING_REG_EXP, ''));
-      Value(node, { spreadValues: isArrayValueType })(this);
+      this.bindValue(node, isArrayValueType);
     }
     // Treat cases when we want to use an inline binding but the pg does not
     // support it. That could be for example the case FROM TO clause.
@@ -117,7 +117,7 @@ export class SqlTagParserContext {
       this.replaceLastFragment(
         lastFragment.replace(INLINE_VALUE_BINDING_REG_EXP, ''),
       );
-      Literal(node, { spreadValues: isArrayValueType })(this);
+      renderLiteral(this, { value: node, spreadValues: isArrayValueType });
     } else if (typeof node === 'string') {
       this.addFragment(node);
     } else {
@@ -257,7 +257,7 @@ export class SqlTagParserContext {
     return (
       typeof node === 'object' &&
       node !== null &&
-      typeof Reflect.get(node, 'parse') === 'function'
+      typeof Reflect.get(node, 'toSql') === 'function'
     );
   }
 
