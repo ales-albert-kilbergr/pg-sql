@@ -1,9 +1,8 @@
+/**
+ * This module builds an inmemory model of the database schemas, tables, columns, etc.
+ */
+
 export * from './identifier';
-export * from './column';
-export * from './data-type';
-export * from './database-object';
-export * from './database';
-export * from './schema';
-export * from './table';
-export * from './table-constraint';
 export * from './common';
+export * from './root';
+export * from './sequence';
