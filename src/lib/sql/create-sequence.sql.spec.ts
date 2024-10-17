@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/init-declarations */
-import { Database, type DataTypeDiscriminant, type Schema } from '../model';
+import { Database } from '../database';
 import {
   type CreateSequenceSqlArgs,
   getCreateSequenceSql,
 } from './create-sequence.sql';
+import type { DataTypeDiscriminant } from '../data-type';
+import type { Schema } from '../schema';
 
 describe('(Unit) getCreateSequenceSql', () => {
   let database: Database;

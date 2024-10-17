@@ -4,5 +4,4 @@
 
 export * from './identifier';
 export * from './common';
-export * from './root';
 export * from './sequence';

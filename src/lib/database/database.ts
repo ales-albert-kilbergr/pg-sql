@@ -1,29 +1,12 @@
 import { DataTypeRegistry } from '../data-type';
 import { DatabaseObject, DatabaseObjectList } from '../database-object';
 import { Schema } from '../schema';
-import type {
-  Pool,
-  QueryConfig,
-  QueryResultRow,
-  QueryResult,
-  PoolClient,
-} from 'pg';
-import {
-  type PreparedSqlCommand,
-  SqlCommand,
-  SqlCommandRunner,
-  SqlCommandTransactionRunner,
-} from '../commands';
-import {
-  prepareCreateDatabaseCommand,
-  type PreparedCreateDatabaseCommand,
-} from './create-database';
-import {
-  type PreparedDropDatabaseCommand,
-  prepareDropDatabaseCommand,
-} from './drop-database';
+import type { Pool, QueryConfig, QueryResultRow, QueryResult } from 'pg';
+import type { SqlQuery } from '../sql-query';
 import type { Either } from 'fp-ts/Either';
 import type { InvalidArgsException } from '../args';
+import { SqlTransaction } from './transaction';
+import { CreateDatabaseSql, DropDatabaseSql } from './sql';
 
 export class Database extends DatabaseObject {
   public static DEFAULT_NAME = 'default';
@@ -99,35 +82,12 @@ export class Database extends DatabaseObject {
     });
   }
 
-  public async transaction<R = unknown>(
-    clb: (client: PoolClient) => Promise<R>,
-  ): Promise<R> {
+  public prepareTransaction(): SqlTransaction {
     if (!this.pool) {
       throw new Error('Pool is not set!');
     }
 
-    const client = await this.pool.connect();
-    const runner = new SqlCommandTransactionRunner(client);
-
-    try {
-      await runner.startTransaction();
-
-      const result = await clb(client);
-
-      await runner.commitTransaction();
-
-      return result;
-    } catch (error) {
-      await runner.rollbackTransaction();
-      throw error;
-    } finally {
-      // Release the client back to the pool
-      client.release();
-    }
-  }
-
-  public createCommandRunner(): SqlCommandRunner {
-    return new SqlCommandRunner(this);
+    return new SqlTransaction(this.pool);
   }
 
   public async execute<
@@ -135,22 +95,20 @@ export class Database extends DatabaseObject {
     RESULT = QueryResult,
     ERROR = never,
   >(
-    arg:
-      | SqlCommand<ARGS, RESULT, ERROR>
-      | PreparedSqlCommand<ARGS, RESULT, ERROR>,
+    query: SqlQuery<ARGS, RESULT, ERROR>,
   ): Promise<Either<ERROR | InvalidArgsException<ARGS>, RESULT>> {
-    const commandRunner = this.createCommandRunner();
+    if (!this.pool) {
+      throw new Error('Pool is not set!');
+    }
 
-    const command = arg instanceof SqlCommand ? arg : arg.create();
-
-    return commandRunner.execute<ARGS, RESULT, ERROR>(command);
+    return query.execute(this.pool);
   }
 
-  public prepareCreateDatabaseCommand(): PreparedCreateDatabaseCommand {
-    return prepareCreateDatabaseCommand(this);
+  public prepareCreateSql(): CreateDatabaseSql.Query {
+    return CreateDatabaseSql.create(this);
   }
 
-  public prepareDropDatabaseCommand(): PreparedDropDatabaseCommand {
-    return prepareDropDatabaseCommand(this);
+  public prepareDropSql(): DropDatabaseSql.Query {
+    return DropDatabaseSql.create(this);
   }
 }

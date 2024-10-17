@@ -1,11 +1,12 @@
 import { escapeIdentifier } from 'pg';
 import { formatSqlText } from '../helpers';
-import type { AnySequenceType, DataTypeDiscriminant, Sequence } from '../model';
+import type { AnySequenceType, Sequence } from '../model';
 import {
   getDataTypeSql,
   getIfNotExistsSql,
   getSchemaQualifiedName,
 } from './common.sql';
+import type { DataTypeDiscriminant } from '../data-type';
 /**
  * CREATE SEQUENCE SQL Command.
  *

@@ -6,19 +6,9 @@ import {
 import type { Database } from '../database';
 import { Table, type TableName } from '../table';
 import type { Constructor } from 'type-fest';
-
-import {
-  type PreparedCreateSchemaCommand,
-  prepareCreateSchemaCommand,
-} from './create-schema';
-import {
-  type PreparedDropSchemaCommand,
-  prepareDropSchemaCommand,
-} from './drop-schema';
-import {
-  type PreparedSchemaExistsCommand,
-  prepareSchemaExistsCommand,
-} from './schema-exists';
+import type { DataType, DataTypeDiscriminant } from '../data-type';
+import { type AnySequenceType, Sequence } from '../model';
+import { CreateSchemaSql, DropSchemaSql, SchemaExistsSql } from './sql';
 
 export type SchemaName = DatabaseObjectName;
 
@@ -34,7 +24,7 @@ export class Schema extends DatabaseObject<Database> {
 
   public tables = new DatabaseObjectList<Table>();
 
-  //public sequences = new DatabaseObjectList<Sequence<AnySequenceType>>();
+  public sequences = new DatabaseObjectList<Sequence<AnySequenceType>>();
 
   public get database(): Database {
     return this.parent;
@@ -55,28 +45,27 @@ export class Schema extends DatabaseObject<Database> {
     return table;
   }
 
-  /*
   public defineSequence<
     T extends AnySequenceType = DataTypeDiscriminant.INTEGER,
   >(name: SchemaName, dataType?: DataType<T>): Sequence<T> {
     const type = dataType ?? this.database.dataTypes.getInt();
     const sequence = new Sequence<T>(name, this, type as DataType<T>);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.sequences.add(sequence as any);
 
     return sequence;
   }
-    */
 
-  public prepareCreateSchema(): PreparedCreateSchemaCommand {
-    return prepareCreateSchemaCommand(this);
+  public prepareCreateSql(): CreateSchemaSql.Query {
+    return CreateSchemaSql.create(this);
   }
 
-  public prepareDropSchema(): PreparedDropSchemaCommand {
-    return prepareDropSchemaCommand(this);
+  public prepareDropSql(): DropSchemaSql.Query {
+    return DropSchemaSql.create(this);
   }
 
-  public prepareSchemaExists(): PreparedSchemaExistsCommand {
-    return prepareSchemaExistsCommand(this);
+  public prepareExistsSql(): SchemaExistsSql.Query {
+    return SchemaExistsSql.create(this);
   }
 }

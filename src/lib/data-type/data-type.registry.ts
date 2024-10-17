@@ -68,6 +68,22 @@ export class DataTypeRegistry {
     });
   }
 
+  public getUuid(): DataType<DataTypeDiscriminant.UUID, string> {
+    return this.getDataType(DataTypeDiscriminant.UUID, {});
+  }
+
+  public getJsonb(): DataType<DataTypeDiscriminant.JSONB, object> {
+    return this.getDataType(DataTypeDiscriminant.JSONB, {});
+  }
+
+  public getJson(): DataType<DataTypeDiscriminant.JSON, object> {
+    return this.getDataType(DataTypeDiscriminant.JSON, {});
+  }
+
+  public getBytea(): DataType<DataTypeDiscriminant.BYTEA, Buffer> {
+    return this.getDataType(DataTypeDiscriminant.BYTEA, {});
+  }
+
   private getDataType<
     N extends DataTypeDiscriminant,
     V = DefaultDataNameTypeMap<N>,

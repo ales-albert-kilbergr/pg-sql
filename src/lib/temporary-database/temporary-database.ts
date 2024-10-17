@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { stringRandom } from '@kilbergr/string';
-import { Database } from '../model';
-import { type ClientBase, Pool, type PoolConfig } from 'pg';
-import type {
-  PreparedCreateDatabaseCommand,
-  PreparedDropDatabaseCommand,
+import {
+  type CreateDatabaseSql,
+  Database,
+  type DropDatabaseSql,
 } from '../database';
+import { type ClientBase, Pool, type PoolConfig } from 'pg';
 
 export interface TemporaryDatabaseMigration {
   // We always run the migration up only
@@ -17,11 +18,11 @@ export class TemporaryDatabase {
   /**
    * The database object for the temporary database.
    */
-  public readonly database: Database;
+  public readonly temporaryDatabase: Database;
 
-  private readonly createDatabase: PreparedCreateDatabaseCommand;
+  private readonly createTemporaryDatabase: CreateDatabaseSql.Query;
 
-  private readonly dropDatabase: PreparedDropDatabaseCommand;
+  private readonly dropDatabase: DropDatabaseSql.Query;
 
   private readonly tempDatabaseConfig: PoolConfig;
 
@@ -37,7 +38,7 @@ export class TemporaryDatabase {
       database: tempDatabaseName,
     };
 
-    this.database = new Database(
+    this.temporaryDatabase = new Database(
       tempDatabaseName,
       new Pool(this.tempDatabaseConfig),
     );
@@ -47,13 +48,15 @@ export class TemporaryDatabase {
       new Pool(adminConfig),
     );
 
-    this.createDatabase = this.adminDatabase
-      .prepareCreateDatabaseCommand()
+    this.createTemporaryDatabase = this.adminDatabase
+      .prepareCreateSql()
+      .database(this.temporaryDatabase)
       .withOwner(adminConfig.user);
 
     this.dropDatabase = this.adminDatabase
-      .prepareDropDatabaseCommand()
-      .withForce(true);
+      .prepareDropSql()
+      .withForce(true)
+      .database(this.temporaryDatabase);
   }
 
   public static createRandomDatabaseName(prefix?: string): string {
@@ -97,13 +100,13 @@ export class TemporaryDatabase {
    * Creates the temporary database.
    */
   public async init(): Promise<void> {
-    await this.adminDatabase.execute(this.createDatabase);
+    await this.createTemporaryDatabase.execute(this.adminDatabase.getPool()!);
   }
   /**
    * Access low level PG pool for testing database.
    */
   public getPoolOrFail(): Pool {
-    const pool = this.database.getPool();
+    const pool = this.temporaryDatabase.getPool();
     if (!pool) {
       throw new Error(
         'Temporary database is not initialized yet. Call init() first.',
@@ -153,7 +156,7 @@ export class TemporaryDatabase {
    * Drops the temporary database.
    */
   public async close(): Promise<void> {
-    const tempDatabasePool = this.database.getPool();
+    const tempDatabasePool = this.temporaryDatabase.getPool();
 
     if (tempDatabasePool) {
       // Disconnect the pool before shutting dropping the testing database.
@@ -162,6 +165,8 @@ export class TemporaryDatabase {
       await tempDatabasePool.end();
     }
 
-    await this.adminDatabase.execute(this.dropDatabase);
+    await this.dropDatabase.execute(this.adminDatabase.getPool()!);
+
+    await this.adminDatabase.getPool()!.end();
   }
 }

@@ -61,8 +61,14 @@ export class ArgsMap<ARGS extends object> {
     return new ArgsMap<ARGS>(this.argsCtor, { ...this.args });
   }
 
-  public async build(): Promise<Either<InvalidArgsException<ARGS>, ARGS>> {
-    const args = Object.assign(new this.argsCtor(), this.args);
+  public async build(
+    overrideArgs?: Partial<ARGS>,
+  ): Promise<Either<InvalidArgsException<ARGS>, ARGS>> {
+    const args = Object.assign(
+      new this.argsCtor(),
+      this.args,
+      overrideArgs ?? {},
+    );
 
     const validationErrors = await validate(args);
 

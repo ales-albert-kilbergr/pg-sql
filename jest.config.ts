@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 /* eslint-disable */
 export default {
   displayName: 'pg-sql',

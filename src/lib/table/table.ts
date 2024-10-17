@@ -2,11 +2,7 @@
 import { ColumnList, type ColumnName } from '../column';
 import { Column } from '../column';
 import type { DataType, DataTypeDiscriminant } from '../data-type';
-import {
-  DatabaseObject,
-  DatabaseObjectList,
-  type DatabaseObjectName,
-} from '../database-object';
+import { DatabaseObject, DatabaseObjectList } from '../database-object';
 import type { Database } from '../database';
 import type { Schema } from '../schema';
 import {
@@ -19,23 +15,23 @@ import {
   type TableConstraintName,
 } from './table-constraint';
 import {
-  prepareCreateTableCommand,
-  type PreparedCreateTableCommand,
-} from './create-table';
+  TablePartitionStrategy,
+  type TablePartitionType,
+  type TablePartitionKey,
+  type TablePartitionNameBuilder,
+} from './table-partition';
+import type { TableName } from './table.types';
 import {
-  type PreparedDropTableCommand,
-  prepareDropTableCommand,
-} from './drop-table';
-import {
-  type PreparedTableExistsCommand,
-  prepareTableExistsCommand,
-} from './table-exists';
+  CreateTablePartitionSql,
+  CreateTableSql,
+  DropTableSql,
+  InsertIntoTableSql,
+  TableExistsSql,
+} from './sql';
 
-export type TableName = DatabaseObjectName;
-
-export type TablespaceName = DatabaseObjectName;
-
-export class Table extends DatabaseObject<Schema> {
+export class Table<
+  P extends TablePartitionType = any,
+> extends DatabaseObject<Schema> {
   public declare parent: Schema;
 
   public readonly columns = new ColumnList();
@@ -51,6 +47,8 @@ export class Table extends DatabaseObject<Schema> {
   public readonly foreignKeys = new DatabaseObjectList<
     TableConstraint<TableConstraintDiscriminant.FOREIGN_KEY>
   >();
+
+  public partitioning?: TablePartitionStrategy<P>;
 
   public unlogged?: boolean;
 
@@ -84,7 +82,7 @@ export class Table extends DatabaseObject<Schema> {
   public defineColumn<D extends DataType<any, any>>(
     type: D,
     name: ColumnName,
-    options: { nullable?: boolean; default?: string } = {},
+    options: { nullable?: boolean; default?: string; comment?: string } = {},
   ): Column<D> {
     const column = new Column<D>(type, name, this);
 
@@ -97,6 +95,10 @@ export class Table extends DatabaseObject<Schema> {
       column.defineDefault({
         expression: options.default,
       });
+    }
+
+    if (options.comment) {
+      column.comment = options.comment;
     }
 
     return column;
@@ -173,7 +175,9 @@ export class Table extends DatabaseObject<Schema> {
     const dataType = this.database.dataTypes.getTimestamptz();
     const columnName = 'created_at';
 
-    const column = this.defineColumn(dataType, columnName);
+    const column = this.defineColumn(dataType, columnName, {
+      default: 'now()',
+    });
     column.propertyKey = propertyKey ?? columnName;
 
     return column;
@@ -185,21 +189,46 @@ export class Table extends DatabaseObject<Schema> {
     const dataType = this.database.dataTypes.getTimestamptz();
     const columnName = 'updated_at';
 
-    const column = this.defineColumn(dataType, columnName);
+    const column = this.defineColumn(dataType, columnName, {
+      default: 'now()',
+    });
     column.propertyKey = propertyKey ?? columnName;
 
     return column;
   }
 
-  public prepareCreateTable(): PreparedCreateTableCommand {
-    return prepareCreateTableCommand().table(this);
+  public definePartitionStrategy<T extends TablePartitionType>(
+    type: T,
+    key: TablePartitionKey<T>,
+    buildPartitionName: TablePartitionNameBuilder<T>,
+  ): TablePartitionStrategy<T> {
+    this.partitioning = new TablePartitionStrategy<T>(
+      type,
+      key,
+      buildPartitionName,
+      this,
+    ) as any;
+
+    return this.partitioning as unknown as TablePartitionStrategy<T>;
   }
 
-  public prepareTableExists(): PreparedTableExistsCommand {
-    return prepareTableExistsCommand().table(this);
+  public prepareCreateSql(): CreateTableSql.Query {
+    return CreateTableSql.create(this);
   }
 
-  public prepareDropTable(): PreparedDropTableCommand {
-    return prepareDropTableCommand().table(this);
+  public prepareExistsSql(): TableExistsSql.Query {
+    return TableExistsSql.create(this);
+  }
+
+  public prepareDropSql(): DropTableSql.Query {
+    return DropTableSql.create(this);
+  }
+
+  public prepareCreatePartitionSql(): CreateTablePartitionSql.Query<P> {
+    return CreateTablePartitionSql.create(this);
+  }
+
+  public prepareInsertSql<V = object>(): InsertIntoTableSql.Query<V> {
+    return InsertIntoTableSql.create(this);
   }
 }

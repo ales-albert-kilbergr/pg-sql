@@ -90,4 +90,10 @@ export enum DataTypeDiscriminant {
   BYTEA = 'bytea',
   // Date and Time
   TIMESTAMPTZ = 'timestamptz',
+
+  UUID = 'uuid',
+
+  JSONB = 'jsonb',
+
+  JSON = 'json',
 }

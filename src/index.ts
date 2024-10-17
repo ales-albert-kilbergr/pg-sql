@@ -6,13 +6,14 @@
 //export * from './lib/sql';
 //export * from './lib/queries';
 export * from './lib/model';
-export * from './lib/commands';
+export * from './lib/sql-query';
 export * from './lib/sql';
 export * from './lib/helpers';
 export * from './lib/database';
 export * from './lib/schema';
-export * as Decorators from './lib/decorators';
 export * from './lib/temporary-database';
-export * from './lib/nest';
+export * from './lib/table';
+export * from './lib/column';
+export * from './lib/pipe';
 //export * from './lib/entity';
 //export * from './lib/data-processors';

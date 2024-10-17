@@ -1,7 +1,7 @@
 import type { Column } from '../../column';
 import type { DataType, DataTypeDiscriminant } from '../../data-type';
-import { DatabaseObject } from '../database-object';
-import type { Schema } from '../schema';
+import { DatabaseObject } from '../../database-object';
+import type { Schema } from '../../schema';
 
 export type AnySequenceType =
   | DataTypeDiscriminant.BIGINT

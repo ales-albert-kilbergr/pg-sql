@@ -33,6 +33,14 @@ export type DefaultDataNameTypeMap<N extends DataTypeDiscriminant> =
   ? string
   : N extends DataTypeDiscriminant.TIMESTAMPTZ
   ? Date
+  : N extends DataTypeDiscriminant.UUID
+  ? string
+  : N extends DataTypeDiscriminant.JSON
+  ? object
+  : N extends DataTypeDiscriminant.JSONB
+  ? object
+  : N extends DataTypeDiscriminant.BYTEA
+  ? Buffer
   : unknown;
 
 // prettier-ignore

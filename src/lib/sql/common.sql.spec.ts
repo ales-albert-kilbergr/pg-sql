@@ -1,4 +1,4 @@
-import { DataType, DataTypeDiscriminant } from '../model';
+import { DataType, DataTypeDiscriminant } from '../data-type';
 import {
   getAuthorizationSql,
   getCascadeSql,

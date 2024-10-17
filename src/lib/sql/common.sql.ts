@@ -1,5 +1,5 @@
 import { escapeIdentifier } from 'pg';
-import { DataType, DataTypeDiscriminant } from '../model';
+import { DataType, DataTypeDiscriminant } from '../data-type';
 
 export interface SchemaOwnedObjectFragment {
   name: string;
@@ -73,4 +73,28 @@ export function getReturningSql(columns?: string[]): string {
   return columns?.length
     ? `RETURNING ${columns.map(escapeIdentifier).join(', ')}`
     : '';
+}
+
+export interface EqCondition<V> {
+  $eq: V;
+}
+
+export interface InCondition<V> {
+  $in: V[];
+}
+
+export function isEqCondition<V>(
+  condition: unknown,
+): condition is EqCondition<V> {
+  return (
+    typeof condition === 'object' && condition !== null && '$eq' in condition
+  );
+}
+
+export function isInCondition<V>(
+  condition: unknown,
+): condition is InCondition<V> {
+  return (
+    typeof condition === 'object' && condition !== null && '$in' in condition
+  );
 }
